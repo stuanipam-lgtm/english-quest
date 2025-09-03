@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Quest - Monthly Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #f8f9fa;
+            opacity: 0.9;
+        }
+
+        .missions-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .missions-section h3 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .missions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .mission-category {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid #3498db;
+        }
+
+        .mission-category h4 {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .mission-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mission-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mission-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .mission-text {
+            flex: 1;
+            color: #2c3e50;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-right: 15px;
+        }
+
+        .mission-xp {
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            white-space: nowrap;
+        }
+
+        .xp-10 { background: linear-gradient(45deg, #3498db, #2980b9); }
+        .xp-15 { background: linear-gradient(45deg, #e74c3c, #c0392b); }
+        .xp-20 { background: linear-gradient(45deg, #2ecc71, #27ae60); }
+
+        .admin-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .admin-button {
+            background: linear-gradient(45deg, #34495e, #2c3e50);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .admin-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .admin-button.active {
+            background: linear-gradient(45deg, #27ae60, #229954);
+        }
+
+        .admin-status {
+            margin-top: 10px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .admin-status.active {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .student-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .student-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+        }
+
+        .student-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        .student-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .student-level {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 25px;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .level-beginner { background: linear-gradient(45deg, #95a5a6, #7f8c8d); }
+        .level-adventurer { background: linear-gradient(45deg, #f39c12, #e67e22); }
+        .level-hero { background: linear-gradient(45deg, #27ae60, #229954); }
+        .level-master { background: linear-gradient(45deg, #9b59b6, #8e44ad); }
+
+        .xp-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .xp-current {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .xp-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+            background: #ecf0f1;
+            border-radius: 25px;
+            height: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 25px;
+            transition: all 0.8s ease;
+            position: relative;
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.3) 25%, rgba(255,255,255,0.3) 50%, transparent 50%, transparent 75%, rgba(255,255,255,0.3) 75%);
+            background-size: 20px 20px;
+            animation: progress-stripes 1s linear infinite;
+        }
+
+        @keyframes progress-stripes {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 0; }
+        }
+
+        .progress-beginner { background: linear-gradient(45deg, #95a5a6, #7f8c8d); }
+        .progress-adventurer { background: linear-gradient(45deg, #f39c12, #e67e22); }
+        .progress-hero { background: linear-gradient(45deg, #27ae60, #229954); }
+        .progress-master { background: linear-gradient(45deg, #9b59b6, #8e44ad); }
+
+        .buttons-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .buttons-container.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .xp-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .xp-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .xp-button:active {
+            transform: translateY(0);
+        }
+
+        .btn-10 { background: linear-gradient(45deg, #3498db, #2980b9); }
+        .btn-15 { background: linear-gradient(45deg, #e74c3c, #c0392b); }
+        .btn-20 { background: linear-gradient(45deg, #2ecc71, #27ae60); }
+
+        .level-thresholds {
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .level-thresholds h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .threshold-item {
+            display: inline-block;
+            margin: 5px 10px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 8px 15px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .save-indicator.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .last-updated {
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .students-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .student-card {
+                padding: 20px;
+            }
+            
+            .buttons-container {
+                gap: 8px;
+            }
+            
+            .xp-button {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            z-index: 1000;
+            pointer-events: none;
+            animation: celebrate 1s ease-out;
+        }
+
+        @keyframes celebrate {
+            0% { 
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% { 
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% { 
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">English Quest</h1>
+            <p class="subtitle">Monthly Challenge</p>
+        </div>
+
+        <div class="missions-section">
+            <h3>🎯 Missions</h3>
+            
+            <div class="missions-grid">
+                <div class="mission-category">
+                    <h4>📚 During the lesson</h4>
+                    <div class="mission-list">
+                        <div class="mission-item">
+                            <span class="mission-text">Speak at least 2 full sentences in English</span>
+                            <span class="mission-xp xp-10">+10 XP</span>
+                        </div>
+                        <div class="mission-item">
+                            <span class="mission-text">Complete the exercises quickly</span>
+                            <span class="mission-xp xp-15">+15 XP</span>
+                        </div>
+                        <div class="mission-item">
+                            <span class="mission-text">Correct one of your sentences with the teacher's help</span>
+                            <span class="mission-xp xp-10">+10 XP</span>
+                        </div>
+                        <div class="mission-item">
+                            <span class="mission-text">Take part in a mini roleplay</span>
+                            <span class="mission-xp xp-20">+20 XP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mission-category">
+                    <h4>🏠 Outside the lesson</h4>
+                    <div class="mission-list">
+                        <div class="mission-item">
+                            <span class="mission-text">Send 1 screenshot of a phrase in English you used in daily life and explain it (WhatsApp, game, song, AI, research, books)</span>
+                            <span class="mission-xp xp-10">+10 XP</span>
+                        </div>
+                        <div class="mission-item">
+                            <span class="mission-text">Watch 5 minutes of a video/series in English and send 2 sentences about it</span>
+                            <span class="mission-xp xp-15">+15 XP</span>
+                        </div>
+                        <div class="mission-item">
+                            <span class="mission-text">Listen to a song in English and translate/sing one verse</span>
+                            <span class="mission-xp xp-15">+15 XP</span>
+                        </div>
+                        <div class="mission-item">
+                            <span class="mission-text">Chat with an AI (screenshot)</span>
+                            <span class="mission-xp xp-20">+20 XP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <button id="adminToggle" class="admin-button" onclick="toggleAdmin()">
+                🔒 Administrator Mode
+            </button>
+            <div id="adminStatus" class="admin-status">
+                View Mode - Only teachers can add XP
+            </div>
+            <div class="last-updated" id="lastUpdated">
+                Last updated: Never
+            </div>
+        </div>
+
+        <div class="students-grid" id="studentsGrid">
+            <!-- Conteúdo será gerado dinamicamente pelo JavaScript -->
+        </div>
+
+        <div class="level-thresholds">
+            <h3>🏆 Level System</h3>
+            <div class="threshold-item level-beginner">0-99 XP: Beginner Explorer</div>
+            <div class="threshold-item level-adventurer">100-299 XP: Language Adventurer</div>
+            <div class="threshold-item level-hero">300-599 XP: English Hero</div>
+            <div class="threshold-item level-master">600+ XP: Fluency Master</div>
+        </div>
+    </div>
+
+    <div class="save-indicator" id="saveIndicator">Changes saved!</div>
+
+    <script>
+        // Dados dos estudantes com estrutura melhorada
+        let students = {
+            ray: { 
+                xp: 0, 
+                name: "🩰 Ray",
+                lastUpdated: null
+            },
+            leo: { 
+                xp: 0, 
+                name: "🏎️ Leo",
+                lastUpdated: null
+            },
+            rafa: { 
+                xp: 0, 
+                name: "🎵 Rafa",
+                lastUpdated: null
+            }
+        };
+
+        // Chave para armazenamento local
+        const STORAGE_KEY = "englishQuestData";
+        const ADMIN_KEY = "englishQuestAdmin";
+        
+        // Admin
+        let isAdminMode = false;
+        const adminPassword = "quest2025";
+        
+        // Níveis
+        const levels = [
+            { name: "Beginner Explorer", min: 0, max: 99, class: "beginner" },
+            { name: "Language Adventurer", min: 100, max: 299, class: "adventurer" },
+            { name: "English Hero", min: 300, max: 599, class: "hero" },
+            { name: "Fluency Master", min: 600, max: Infinity, class: "master" }
+        ];
+
+        // Função para salvar dados no localStorage
+        function saveData() {
+            try {
+                const dataToSave = {
+                    students: students,
+                    timestamp: new Date().toISOString()
+                };
+                
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+                
+                // Mostrar indicador de salvamento
+                showSaveIndicator();
+                
+                // Atualizar a informação de última atualização
+                updateLastUpdatedDisplay();
+                
+                console.log("Dados salvos com sucesso!");
+            } catch (error) {
+                console.error("Erro ao salvar dados:", error);
+            }
+        }
+
+        // Função para carregar dados do localStorage
+        function loadData() {
+            try {
+                const savedData = localStorage.getItem(STORAGE_KEY);
+                
+                if (savedData) {
+                    const parsedData = JSON.parse(savedData);
+                    
+                    // Atualizar os dados dos estudantes mantendo a estrutura padrão
+                    Object.keys(parsedData.students).forEach(studentKey => {
+                        if (students[studentKey]) {
+                            students[studentKey].xp = parsedData.students[studentKey].xp || 0;
+                            students[studentKey].lastUpdated = parsedData.students[studentKey].lastUpdated || null;
+                        }
+                    });
+                    
+                    console.log("Dados carregados com sucesso!");
+                    return true;
+                }
+            } catch (error) {
+                console.error("Erro ao carregar dados:", error);
+            }
+            
+            return false;
+        }
+
+        // Função para verificar e carregar status de admin
+        function loadAdminStatus() {
+            try {
+                const adminStatus = localStorage.getItem(ADMIN_KEY);
+                if (adminStatus) {
+                    const { status, expires } = JSON.parse(adminStatus);
+                    
+                    // Verificar se o status ainda é válido (expira após 2 horas)
+                    if (expires > Date.now()) {
+                        isAdminMode = status;
+                        return true;
+                    } else {
+                        // Limpar status expirado
+                        localStorage.removeItem(ADMIN_KEY);
+                    }
+                }
+            } catch (error) {
+                console.error("Erro ao carregar status de admin:", error);
+            }
+            
+            return false;
+        }
+
+        // Função para salvar status de admin
+        function saveAdminStatus() {
+            try {
+                // Admin mode expira após 2 horas
+                const adminData = {
+                    status: isAdminMode,
+                    expires: Date.now() + (2 * 60 * 60 * 1000) // 2 horas
+                };
+                
+                localStorage.setItem(ADMIN_KEY, JSON.stringify(adminData));
+                console.log("Status de admin salvo!");
+            } catch (error) {
+                console.error("Erro ao salvar status de admin:", error);
+            }
+        }
+
+        // Função para mostrar indicador de salvamento
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('visible');
+            
+            setTimeout(() => {
+                indicator.classList.remove('visible');
+            }, 2000);
+        }
+
+        // Função para atualizar a exibição da última atualização
+        function updateLastUpdatedDisplay() {
+            const lastUpdatedElement = document.getElementById('lastUpdated');
+            const now = new Date();
+            lastUpdatedElement.textContent = `Last updated: ${now.toLocaleTimeString()}`;
+        }
+
+        // Funções auxiliares para níveis e progresso
+        function getLevelInfo(xp) {
+            return levels.find(level => xp >= level.min && xp <= level.max) || levels[0];
+        }
+
+        function getProgressPercentage(xp, level) {
+            if (level.max === Infinity) {
+                return xp >= level.min ? 100 : 0;
+            }
+            const range = level.max - level.min + 1;
+            const progress = xp - level.min;
+            return Math.min((progress / range) * 100, 100);
+        }
+
+        // Função para criar os cards dos estudantes dinamicamente
+        function renderStudentCards() {
+            const studentsGrid = document.getElementById('studentsGrid');
+            studentsGrid.innerHTML = '';
+            
+            Object.keys(students).forEach(studentKey => {
+                const student = students[studentKey];
+                const level = getLevelInfo(student.xp);
+                const progressPercentage = getProgressPercentage(student.xp, level);
+                
+                const studentCard = document.createElement('div');
+                studentCard.className = 'student-card';
+                studentCard.setAttribute('data-student', studentKey);
+                
+                studentCard.innerHTML = `
+                    <h2 class="student-name">${student.name}</h2>
+                    <div class="student-level level-${level.class}">${level.name}</div>
+                    <div class="xp-info">
+                        <div class="xp-current">${student.xp}</div>
+                        <div class="xp-label">XP Points</div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar progress-${level.class}" style="width: ${progressPercentage}%"></div>
+                    </div>
+                    <div class="buttons-container ${isAdminMode ? '' : 'disabled'}">
+                        <button class="xp-button btn-10" onclick="addXP('${studentKey}', 10)">+10 XP</button>
+                        <button class="xp-button btn-15" onclick="addXP('${studentKey}', 15)">+15 XP</button>
+                        <button class="xp-button btn-20" onclick="addXP('${studentKey}', 20)">+20 XP</button>
+                    </div>
+                `;
+                
+                studentsGrid.appendChild(studentCard);
+            });
+        }
+
+        // Função para atualizar a exibição de um estudante específico
+        function updateStudentDisplay(studentName) {
+            const student = students[studentName];
+            const card = document.querySelector(`[data-student="${studentName}"]`);
+            
+            if (!card) {
+                renderStudentCards();
+                return;
+            }
+            
+            const level = getLevelInfo(student.xp);
+            const progressPercentage = getProgressPercentage(student.xp, level);
+
+            card.querySelector('.xp-current').textContent = student.xp;
+
+            const levelElement = card.querySelector('.student-level');
+            levelElement.textContent = level.name;
+            levelElement.className = `student-level level-${level.class}`;
+
+            const progressBar = card.querySelector('.progress-bar');
+            progressBar.style.width = `${progressPercentage}%`;
+            progressBar.className = `progress-bar progress-${level.class}`;
+        }
+
+        function showCelebration(emoji) {
+            const celebration = document.createElement('div');
+            celebration.className = 'celebration';
+            celebration.textContent = emoji;
+            document.body.appendChild(celebration);
+
+            setTimeout(() => {
+                if (document.body.contains(celebration)) {
+                    document.body.removeChild(celebration);
+                }
+            }, 1000);
+        }
+
+        function toggleAdmin() {
+            try {
+                if (!isAdminMode) {
+                    const password = prompt("Enter administrator password:");
+                    
+                    if (password === adminPassword) {
+                        isAdminMode = true;
+                        saveAdminStatus();
+                        updateAdminUI();
+                        showCelebration('🔓');
+                    } else if (password !== null) {
+                        alert("Incorrect password!");
+                    }
+                } else {
+                    isAdminMode = false;
+                    saveAdminStatus();
+                    updateAdminUI();
+                    showCelebration('🔒');
+                }
+            } catch (error) {
+                console.error("Error in toggleAdmin:", error);
+                alert("Error: " + error.message);
+            }
+        }
+
+        function updateAdminUI() {
+            try {
+                const adminButton = document.getElementById('adminToggle');
+                const adminStatus = document.getElementById('adminStatus');
+                const allButtonContainers = document.querySelectorAll('.buttons-container');
+
+                if (!adminButton || !adminStatus) {
+                    console.error("Admin elements not found!");
+                    return;
+                }
+
+                if (isAdminMode) {
+                    adminButton.textContent = '🔓 Administrator Mode Active';
+                    adminButton.classList.add('active');
+                    adminStatus.textContent = 'Administrator Mode - You can add XP';
+                    adminStatus.classList.add('active');
+                    
+                    allButtonContainers.forEach(container => {
+                        container.classList.remove('disabled');
+                    });
+                } else {
+                    adminButton.textContent = '🔒 Administrator Mode';
+                    adminButton.classList.remove('active');
+                    adminStatus.textContent = 'View Mode - Only teachers can add XP';
+                    adminStatus.classList.remove('active');
+                    
+                    allButtonContainers.forEach(container => {
+                        container.classList.add('disabled');
+                    });
+                }
+            } catch (error) {
+                console.error("Error in updateAdminUI:", error);
+            }
+        }
+
+        function addXP(studentName, xpAmount) {
+            if (!isAdminMode) {
+                alert("Access denied! Administrator mode required to add XP.");
+                return;
+            }
+
+            const student = students[studentName];
+            const oldLevel = getLevelInfo(student.xp);
+            
+            student.xp += xpAmount;
+            student.lastUpdated = new Date().toISOString();
+            
+            const newLevel = getLevelInfo(student.xp);
+
+            updateStudentDisplay(studentName);
+            saveData();
+
+            if (oldLevel.name !== newLevel.name) {
+                showCelebration('🎉');
+                
+                const card = document.querySelector(`[data-student="${studentName}"]`);
+                card.style.transform = 'scale(1.05)';
+                card.style.boxShadow = '0 20px 50px rgba(0,0,0,0.3)';
+                
+                setTimeout(() => {
+                    card.style.transform = '';
+                    card.style.boxShadow = '';
+                }, 500);
+            } else {
+                showCelebration('✨');
+            }
+        }
+
+        // Event listener para detectar mudanças em outras abas/janelas
+        function setupStorageEventListener() {
+            window.addEventListener('storage', function(e) {
+                if (e.key === STORAGE_KEY && e.newValue) {
+                    console.log("Dados atualizados em outra aba, recarregando...");
+                    
+                    try {
+                        const newData = JSON.parse(e.newValue);
+                        Object.keys(newData.students).forEach(studentKey => {
+                            if (students[studentKey]) {
+                                students[studentKey].xp = newData.students[studentKey].xp;
+                                students[studentKey].lastUpdated = newData.students[studentKey].lastUpdated;
+                                updateStudentDisplay(studentKey);
+                            }
+                        });
+                        
+                        updateLastUpdatedDisplay();
+                    } catch (error) {
+                        console.error("Erro ao processar atualização de storage:", error);
+                    }
+                }
+                
+                if (e.key === ADMIN_KEY) {
+                    console.log("Status de admin atualizado em outra aba");
+                    const wasAdmin = isAdminMode;
+                    loadAdminStatus();
+                    
+                    if (wasAdmin !== isAdminMode) {
+                        updateAdminUI();
+                        renderStudentCards();
+                    }
+                }
+            });
+        }
+
+        // Inicializar
+        window.onload = function() {
+            console.log("Page loaded, initializing...");
+            
+            // Carregar dados salvos
+            loadData();
+            
+            // Carregar status de admin
+            loadAdminStatus();
+            
+            // Renderizar os cards dos estudantes
+            renderStudentCards();
+            
+            // Atualizar a UI de admin
+            updateAdminUI();
+            
+            // Configurar listener para mudanças de storage
+            setupStorageEventListener();
+            
+            // Atualizar a informação de última atualização
+            updateLastUpdatedDisplay();
+            
+            console.log("Initialization complete");
+        };
+
+        // Funções globais
+        window.toggleAdmin = toggleAdmin;
+        window.addXP = addXP;
+    </script>
+</body>
+</html>

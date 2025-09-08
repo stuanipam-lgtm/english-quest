@@ -30,7 +30,7 @@
         }
 
         .title {
-            font-size: clamp(5rem, 7vw, 5.5rem);
+            font-size: clamp(3rem, 7vw, 5.5rem);
             font-weight: bold;
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
@@ -42,6 +42,84 @@
             font-size: 2.2rem;
             color: #f8f9fa;
             opacity: 0.9;
+        }
+
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .status-connected {
+            background: linear-gradient(45deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .status-connecting {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        .status-disconnected {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .firebase-setup {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .firebase-setup h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .firebase-setup.hidden {
+            display: none;
+        }
+
+        .setup-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .setup-input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .setup-button {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .setup-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         .missions-section {
@@ -110,19 +188,28 @@
             margin-right: 15px;
         }
 
-        .mission-xp {
-            font-weight: bold;
-            padding: 6px 12px;
-            border-radius: 20px;
-            color: white;
-            font-size: 0.8rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            white-space: nowrap;
+        .mission-controls { 
+            display: flex; 
+            gap: 10px; 
+            align-items: center; 
+            flex-wrap: wrap;
         }
 
-        .xp-10 { background: linear-gradient(45deg, #3498db, #2980b9); }
-        .xp-15 { background: linear-gradient(45deg, #e74c3c, #c0392b); }
-        .xp-20 { background: linear-gradient(45deg, #2ecc71, #27ae60); }
+        .mission-select {
+            background: #fff; 
+            border: 2px solid #e0e4ef; 
+            color: #2c3e50;
+            padding: 8px 12px; 
+            border-radius: 10px; 
+            min-width: 140px; 
+            outline: none;
+            font-size: 0.85rem;
+        }
+
+        .mission-select:focus { 
+            border-color: #3498db; 
+            box-shadow: 0 0 0 3px rgba(52,152,219,.15); 
+        }
 
         .admin-section {
             text-align: center;
@@ -161,6 +248,44 @@
         .admin-status.active {
             color: #27ae60;
             font-weight: bold;
+        }
+
+        .add-student-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .add-student-section.visible {
+            display: block;
+        }
+
+        .add-student-input {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 0 10px;
+            font-size: 1rem;
+            width: 200px;
+        }
+
+        .add-student-input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .add-student-btn {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
         }
 
         .students-grid {
@@ -319,6 +444,11 @@
             margin-top: 10px;
             width: 100%;
         }
+        .btn-delete {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            margin-top: 5px;
+            width: 100%;
+        }
 
         .level-thresholds {
             background: rgba(255,255,255,0.9);
@@ -357,6 +487,7 @@
             transition: all 0.3s ease;
             opacity: 0;
             transform: translateY(20px);
+            color: #2c3e50;
         }
 
         .save-indicator.visible {
@@ -429,6 +560,11 @@
             font-weight: bold;
             cursor: pointer;
             flex: 1;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-1px);
         }
 
         .modal-btn.confirm {
@@ -479,6 +615,16 @@
             .modal-buttons {
                 flex-direction: column;
             }
+
+            .mission-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .mission-select {
+                min-width: auto;
+                width: 100%;
+            }
         }
 
         .celebration {
@@ -506,6 +652,28 @@
                 transform: translate(-50%, -50%) scale(1);
             }
         }
+
+        .instruction-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .instruction-box h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .instruction-box ol {
+            padding-left: 20px;
+        }
+
+        .instruction-box li {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
@@ -515,578 +683,732 @@
             <p class="subtitle">Monthly Challenge</p>
         </div>
 
-        <div class="missions-section">
-            <h3>🎯 Missions</h3>
-            
-            <div class="missions-grid">
-                <div class="mission-category">
-                    <h4>📚 During the lesson</h4>
-                    <div class="mission-list">
-                        <div class="mission-item">
-                            <span class="mission-text">Speak at least 2 full sentences in English</span>
-                            <span class="mission-xp xp-10">+10 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Complete the exercises quickly</span>
-                            <span class="mission-xp xp-15">+15 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Correct one of your sentences with the teacher's help</span>
-                            <span class="mission-xp xp-10">+10 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Take part in a mini roleplay</span>
-                            <span class="mission-xp xp-20">+20 XP</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mission-category">
-                    <h4>🏠 Outside the lesson</h4>
-                    <div class="mission-list">
-                        <div class="mission-item">
-                            <span class="mission-text">Send 1 screenshot of a phrase in English you used in daily life and explain it (WhatsApp, game, song, AI, research, books)</span>
-                            <span class="mission-xp xp-10">+10 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Watch 5 minutes of a video/series in English and send 2 sentences about it</span>
-                            <span class="mission-xp xp-15">+15 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Listen to a song in English and translate/sing one verse</span>
-                            <span class="mission-xp xp-15">+15 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Chat with an AI (screenshot)</span>
-                            <span class="mission-xp xp-20">+20 XP</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Status de conexão -->
+        <div id="connectionStatus" class="connection-status status-connecting">
+            🔄 Connecting...
         </div>
 
-        <div class="admin-section">
-            <button id="adminToggle" class="admin-button" onclick="toggleAdmin()">
-                🔒 Administrator Mode
-            </button>
-            <div id="adminStatus" class="admin-status">
-                View Mode - Only teachers can add XP
+        <!-- Setup do Firebase -->
+        <div id="firebaseSetup" class="firebase-setup">
+            <h3>🔧 Firebase Configuration</h3>
+            <div class="instruction-box">
+                <h4>📋 Setup Instructions:</h4>
+                <ol>
+                    <li>Go to <a href="https://console.firebase.google.com" target="_blank" style="color: #fff;">Firebase Console</a></li>
+                    <li>Create a new project or select existing</li>
+                    <li>Go to "Realtime Database" → Create database</li>
+                    <li>Set rules to: <code>{ "rules": { ".read": true, ".write": true } }</code></li>
+                    <li>Copy your database URL and paste below</li>
+                </ol>
             </div>
+            <input type="url" id="firebaseUrl" class="setup-input" placeholder="https://your-project-default-rtdb.firebaseio.com/" 
+                   title="Firebase Realtime Database URL">
+            <br>
+            <button id="connectFirebase" class="setup-button">🚀 Connect to Firebase</button>
+            <button id="useOffline" class="setup-button" style="background: linear-gradient(45deg, #95a5a6, #7f8c8d);">
+                📱 Use Offline Mode
+            </button>
+        </div>
+
+        <div id="mainContent" style="display: none;">
+            <div class="missions-section">
+                <h3>🎯 Missions</h3>
+                
+                <div class="missions-grid">
+                    <div class="mission-category">
+                        <h4>📚 During the lesson</h4>
+                        <div class="mission-list">
+                            <div class="mission-item">
+                                <span class="mission-text">Speak at least 2 full sentences in English</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="speak" aria-label="Select student for speaking mission"></select>
+                                    <button class="xp-button btn-10" data-xp="10" data-mission="speak">+10 XP</button>
+                                </div>
+                            </div>
+                            <div class="mission-item">
+                                <span class="mission-text">Complete the exercises quickly</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="exercises" aria-label="Select student for exercises mission"></select>
+                                    <button class="xp-button btn-15" data-xp="15" data-mission="exercises">+15 XP</button>
+                                </div>
+                            </div>
+                            <div class="mission-item">
+                                <span class="mission-text">Correct one of your sentences with the teacher's help</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="correct" aria-label="Select student for correction mission"></select>
+                                    <button class="xp-button btn-10" data-xp="10" data-mission="correct">+10 XP</button>
+                                </div>
+                            </div>
+                            <div class="mission-item">
+                                <span class="mission-text">Take part in a mini roleplay</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="roleplay" aria-label="Select student for roleplay mission"></select>
+                                    <button class="xp-button btn-20" data-xp="20" data-mission="roleplay">+20 XP</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mission-category">
+                        <h4>🏠 Outside the lesson</h4>
+                        <div class="mission-list">
+                            <div class="mission-item">
+                                <span class="mission-text">Do your weekly homework before the next class</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="homework" aria-label="Select student for homework mission"></select>
+                                    <button class="xp-button btn-10" data-xp="10" data-mission="homework">+10 XP</button>
+                                </div>
+                            </div>
+                            <div class="mission-item">
+                                <span class="mission-text">Practice pronunciation with online tools</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="pronunciation" aria-label="Select student for pronunciation mission"></select>
+                                    <button class="xp-button btn-15" data-xp="15" data-mission="pronunciation">+15 XP</button>
+                                </div>
+                            </div>
+                            <div class="mission-item">
+                                <span class="mission-text">Watch a 10-minute English video with subtitles</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="video" aria-label="Select student for video mission"></select>
+                                    <button class="xp-button btn-10" data-xp="10" data-mission="video">+10 XP</button>
+                                </div>
+                            </div>
+                            <div class="mission-item">
+                                <span class="mission-text">Write 5 sentences using new vocabulary</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="writing" aria-label="Select student for writing mission"></select>
+                                    <button class="xp-button btn-20" data-xp="20" data-mission="writing">+20 XP</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <button id="adminToggle" class="admin-button">🔧 Admin Mode</button>
+                <div id="adminStatus" class="admin-status">Click to enable admin controls</div>
+            </div>
+
+            <div id="addStudentSection" class="add-student-section">
+                <h3>➕ Add New Student</h3>
+                <input type="text" id="newStudentName" class="add-student-input" placeholder="Student Name" maxlength="30">
+                <button id="addStudentBtn" class="add-student-btn">Add Student</button>
+            </div>
+
+            <div id="studentsContainer" class="students-grid">
+                <!-- Students will be dynamically generated here -->
+            </div>
+
+            <div class="level-thresholds">
+                <h3>🏆 Level Thresholds</h3>
+                <span class="threshold-item level-beginner">Beginner: 0-50 XP</span>
+                <span class="threshold-item level-adventurer">Adventurer: 51-150 XP</span>
+                <span class="threshold-item level-hero">Hero: 151-300 XP</span>
+                <span class="threshold-item level-master">Master: 301+ XP</span>
+            </div>
+
             <div class="last-updated" id="lastUpdated">
                 Last updated: Never
             </div>
         </div>
+    </div>
 
-        <div class="students-grid" id="studentsGrid">
-            <!-- Conteúdo será gerado dinamicamente pelo JavaScript -->
-        </div>
-
-        <div class="level-thresholds">
-            <h3>🏆 Level System</h3>
-            <div class="threshold-item level-beginner">0-99 XP: Beginner Explorer</div>
-            <div class="threshold-item level-adventurer">100-299 XP: Language Adventurer</div>
-            <div class="threshold-item level-hero">300-599 XP: English Hero</div>
-            <div class="threshold-item level-master">600+ XP: Fluency Master</div>
+    <!-- Modal de edição -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Student</h2>
+            <input type="text" id="editStudentName" class="modal-input" placeholder="Student Name" maxlength="30">
+            <input type="number" id="editStudentXp" class="modal-input" placeholder="XP Amount" min="0" max="9999">
+            <div class="modal-buttons">
+                <button id="saveEdit" class="modal-btn confirm">Save</button>
+                <button id="cancelEdit" class="modal-btn cancel">Cancel</button>
+            </div>
+            <button id="addXpModal" class="modal-btn add">Add 10 XP</button>
+            <button id="subtractXpModal" class="modal-btn subtract">Remove 10 XP</button>
         </div>
     </div>
 
-    <div class="save-indicator" id="saveIndicator">Changes saved!</div>
-
-    <!-- Modal para edição de XP -->
-    <div class="modal" id="editModal">
-        <div class="modal-content">
-            <h2 id="modalTitle">Edit XP</h2>
-            <input type="number" id="xpInput" class="modal-input" min="0" value="0">
-            <div>
-                <button class="modal-btn add" onclick="modifyXpValue(10)">+10</button>
-                <button class="modal-btn add" onclick="modifyXpValue(15)">+15</button>
-                <button class="modal-btn add" onclick="modifyXpValue(20)">+20</button>
-            </div>
-            <div>
-                <button class="modal-btn subtract" onclick="modifyXpValue(-10)">-10</button>
-                <button class="modal-btn subtract" onclick="modifyXpValue(-15)">-15</button>
-                <button class="modal-btn subtract" onclick="modifyXpValue(-20)">-20</button>
-            </div>
-            <div class="modal-buttons">
-                <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
-                <button class="modal-btn confirm" onclick="saveXpChanges()">Save Changes</button>
-            </div>
-        </div>
+    <!-- Indicador de salvamento -->
+    <div id="saveIndicator" class="save-indicator">
+        ☁️ Synced to cloud
     </div>
 
     <script>
-        // Dados dos estudantes com estrutura melhorada
-        let students = {
-            ray: { 
-                xp: 0, 
-                name: "🩰 Ray",
-                lastUpdated: null
-            },
-            leo: { 
-                xp: 0, 
-                name: "🏎️ Leo",
-                lastUpdated: null
-            },
-            rafa: { 
-                xp: 0, 
-                name: "🎵 Rafa",
-                lastUpdated: null
-            }
-        };
-
-        // Chave para armazenamento local
-        const STORAGE_KEY = "englishQuestData";
-        const ADMIN_KEY = "englishQuestAdmin";
-        
-        // Variáveis para controle do modal de edição
-        let currentEditingStudent = null;
-        
-        // Admin
-        let isAdminMode = false;
-        const adminPassword = "quest2025";
-        
-        // Níveis
-        const levels = [
-            { name: "Beginner Explorer", min: 0, max: 99, class: "beginner" },
-            { name: "Language Adventurer", min: 100, max: 299, class: "adventurer" },
-            { name: "English Hero", min: 300, max: 599, class: "hero" },
-            { name: "Fluency Master", min: 600, max: Infinity, class: "master" }
-        ];
-
-        // Função para salvar dados no localStorage
-        function saveData() {
-            try {
-                const dataToSave = {
-                    students: students,
-                    timestamp: new Date().toISOString()
+        class EnglishQuest {
+            constructor() {
+                this.students = [];
+                this.isAdminMode = false;
+                this.currentEditStudent = null;
+                this.isOnlineMode = false;
+                this.firebaseUrl = '';
+                this.connectionStatus = 'disconnected';
+                
+                this.levelThresholds = {
+                    beginner: { min: 0, max: 50 },
+                    adventurer: { min: 51, max: 150 },
+                    hero: { min: 151, max: 300 },
+                    master: { min: 301, max: Infinity }
                 };
                 
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
-                
-                // Mostrar indicador de salvamento
-                showSaveIndicator();
-                
-                // Atualizar a informação de última atualização
-                updateLastUpdatedDisplay();
-                
-                console.log("Dados salvos com sucesso!");
-            } catch (error) {
-                console.error("Erro ao salvar dados:", error);
+                this.init();
             }
-        }
 
-        // Função para carregar dados do localStorage
-        function loadData() {
-            try {
-                const savedData = localStorage.getItem(STORAGE_KEY);
-                
-                if (savedData) {
-                    const parsedData = JSON.parse(savedData);
-                    
-                    // Atualizar os dados dos estudantes mantendo a estrutura padrão
-                    Object.keys(parsedData.students).forEach(studentKey => {
-                        if (students[studentKey]) {
-                            students[studentKey].xp = parsedData.students[studentKey].xp || 0;
-                            students[studentKey].lastUpdated = parsedData.students[studentKey].lastUpdated || null;
+            init() {
+                this.bindEvents();
+                this.checkSavedConfig();
+            }
+
+            checkSavedConfig() {
+                const savedUrl = localStorage.getItem('firebaseUrl');
+                if (savedUrl) {
+                    document.getElementById('firebaseUrl').value = savedUrl;
+                    this.connectToFirebase(savedUrl);
+                }
+            }
+
+            bindEvents() {
+                // Firebase setup
+                document.getElementById('connectFirebase').addEventListener('click', () => {
+                    const url = document.getElementById('firebaseUrl').value.trim();
+                    if (url) {
+                        this.connectToFirebase(url);
+                    } else {
+                        alert('Please enter a Firebase URL');
+                    }
+                });
+
+                document.getElementById('useOffline').addEventListener('click', () => {
+                    this.startOfflineMode();
+                });
+
+                // Admin toggle
+                document.getElementById('adminToggle').addEventListener('click', () => {
+                    this.toggleAdminMode();
+                });
+
+                // Add student
+                document.getElementById('addStudentBtn').addEventListener('click', () => {
+                    this.addStudent();
+                });
+
+                document.getElementById('newStudentName').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.addStudent();
+                    }
+                });
+
+                // Mission XP buttons
+                document.querySelectorAll('.xp-button[data-xp]').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const missionType = e.target.dataset.mission;
+                        const xpAmount = parseInt(e.target.dataset.xp);
+                        const select = document.querySelector(`select[data-mission="${missionType}"]`);
+                        const studentId = select.value;
+                        
+                        if (studentId) {
+                            this.addXpToStudent(studentId, xpAmount);
+                            this.showCelebration();
+                        } else {
+                            alert('Please select a student first!');
                         }
                     });
-                    
-                    console.log("Dados carregados com sucesso!");
-                    return true;
-                }
-            } catch (error) {
-                console.error("Erro ao carregar dados:", error);
-            }
-            
-            return false;
-        }
+                });
 
-        // Função para verificar e carregar status de admin
-        function loadAdminStatus() {
-            try {
-                const adminStatus = localStorage.getItem(ADMIN_KEY);
-                if (adminStatus) {
-                    const { status, expires } = JSON.parse(adminStatus);
-                    
-                    // Verificar se o status ainda é válido (expira após 2 horas)
-                    if (expires > Date.now()) {
-                        isAdminMode = status;
-                        return true;
-                    } else {
-                        // Limpar status expirado
-                        localStorage.removeItem(ADMIN_KEY);
+                // Modal events
+                document.getElementById('saveEdit').addEventListener('click', () => {
+                    this.saveStudentEdit();
+                });
+
+                document.getElementById('cancelEdit').addEventListener('click', () => {
+                    this.closeModal();
+                });
+
+                document.getElementById('addXpModal').addEventListener('click', () => {
+                    this.addXpInModal(10);
+                });
+
+                document.getElementById('subtractXpModal').addEventListener('click', () => {
+                    this.addXpInModal(-10);
+                });
+
+                // Close modal on outside click
+                document.getElementById('editModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'editModal') {
+                        this.closeModal();
                     }
-                }
-            } catch (error) {
-                console.error("Erro ao carregar status de admin:", error);
-            }
-            
-            return false;
-        }
+                });
 
-        // Função para salvar status de admin
-        function saveAdminStatus() {
-            try {
-                // Admin mode expira após 2 horas
-                const adminData = {
-                    status: isAdminMode,
-                    expires: Date.now() + (2 * 60 * 60 * 1000) // 2 horas
+                // Enter key support
+                document.getElementById('editStudentName').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.saveStudentEdit();
+                    }
+                });
+
+                document.getElementById('editStudentXp').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.saveStudentEdit();
+                    }
+                });
+
+                document.getElementById('firebaseUrl').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        const url = e.target.value.trim();
+                        if (url) {
+                            this.connectToFirebase(url);
+                        }
+                    }
+                });
+            }
+
+            async connectToFirebase(url) {
+                this.updateConnectionStatus('connecting');
+                
+                try {
+                    // Validate Firebase URL format
+                    if (!url.includes('firebaseio.com') && !url.includes('firebase.google.com')) {
+                        throw new Error('Invalid Firebase URL format');
+                    }
+
+                    this.firebaseUrl = url.endsWith('/') ? url : url + '/';
+                    
+                    // Test connection by trying to read data
+                    const response = await fetch(`${this.firebaseUrl}students.json`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    
+                    // Save configuration
+                    localStorage.setItem('firebaseUrl', this.firebaseUrl);
+                    
+                    // Load existing students or initialize empty array
+                    this.students = data ? Object.keys(data).map(key => ({...data[key], id: key})) : [];
+                    
+                    this.isOnlineMode = true;
+                    this.updateConnectionStatus('connected');
+                    this.showMainContent();
+                    this.renderStudents();
+                    this.updateSelects();
+                    this.startRealtimeSync();
+                    
+                } catch (error) {
+                    console.error('Firebase connection error:', error);
+                    this.updateConnectionStatus('disconnected');
+                    alert(`Connection failed: ${error.message}\n\nPlease check your Firebase URL and database rules.`);
+                }
+            }
+
+            startOfflineMode() {
+                this.isOnlineMode = false;
+                this.students = this.loadStudentsLocal();
+                this.updateConnectionStatus('offline');
+                this.showMainContent();
+                this.renderStudents();
+                this.updateSelects();
+            }
+
+            showMainContent() {
+                document.getElementById('firebaseSetup').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                this.updateLastUpdated();
+            }
+
+            updateConnectionStatus(status) {
+                const statusEl = document.getElementById('connectionStatus');
+                statusEl.className = `connection-status status-${status}`;
+                
+                const statusTexts = {
+                    connecting: '🔄 Connecting...',
+                    connected: '☁️ Connected',
+                    disconnected: '❌ Disconnected',
+                    offline: '📱 Offline Mode'
                 };
                 
-                localStorage.setItem(ADMIN_KEY, JSON.stringify(adminData));
-                console.log("Status de admin salvo!");
-            } catch (error) {
-                console.error("Erro ao salvar status de admin:", error);
+                statusEl.textContent = statusTexts[status] || status;
+                this.connectionStatus = status;
             }
-        }
 
-        // Função para mostrar indicador de salvamento
-        function showSaveIndicator() {
-            const indicator = document.getElementById('saveIndicator');
-            indicator.classList.add('visible');
-            
-            setTimeout(() => {
-                indicator.classList.remove('visible');
-            }, 2000);
-        }
-
-        // Função para atualizar a exibição da última atualização
-        function updateLastUpdatedDisplay() {
-            const lastUpdatedElement = document.getElementById('lastUpdated');
-            const now = new Date();
-            lastUpdatedElement.textContent = `Last updated: ${now.toLocaleTimeString()}`;
-        }
-
-        // Funções auxiliares para níveis e progresso
-        function getLevelInfo(xp) {
-            return levels.find(level => xp >= level.min && xp <= level.max) || levels[0];
-        }
-
-        function getProgressPercentage(xp, level) {
-            if (level.max === Infinity) {
-                return xp >= level.min ? 100 : 0;
-            }
-            const range = level.max - level.min + 1;
-            const progress = xp - level.min;
-            return Math.min((progress / range) * 100, 100);
-        }
-
-        // Função para criar os cards dos estudantes dinamicamente
-        function renderStudentCards() {
-            const studentsGrid = document.getElementById('studentsGrid');
-            studentsGrid.innerHTML = '';
-            
-            Object.keys(students).forEach(studentKey => {
-                const student = students[studentKey];
-                const level = getLevelInfo(student.xp);
-                const progressPercentage = getProgressPercentage(student.xp, level);
+            async startRealtimeSync() {
+                if (!this.isOnlineMode) return;
                 
-                const studentCard = document.createElement('div');
-                studentCard.className = 'student-card';
-                studentCard.setAttribute('data-student', studentKey);
-                
-                studentCard.innerHTML = `
-                    <h2 class="student-name">${student.name}</h2>
-                    <div class="student-level level-${level.class}">${level.name}</div>
-                    <div class="xp-info">
-                        <div class="xp-current">${student.xp}</div>
-                        <div class="xp-label">XP Points</div>
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-bar progress-${level.class}" style="width: ${progressPercentage}%"></div>
-                    </div>
-                    <div class="buttons-container ${isAdminMode ? '' : 'disabled'}">
-                        <button class="xp-button btn-10" onclick="addXP('${studentKey}', 10)">+10 XP</button>
-                        <button class="xp-button btn-15" onclick="addXP('${studentKey}', 15)">+15 XP</button>
-                        <button class="xp-button btn-20" onclick="addXP('${studentKey}', 20)">+20 XP</button>
-                        <button class="xp-button btn-edit" onclick="openEditModal('${studentKey}')">Edit XP</button>
-                    </div>
-                `;
-                
-                studentsGrid.appendChild(studentCard);
-            });
-        }
-
-        // Função para atualizar a exibição de um estudante específico
-        function updateStudentDisplay(studentName) {
-            const student = students[studentName];
-            const card = document.querySelector(`[data-student="${studentName}"]`);
-            
-            if (!card) {
-                renderStudentCards();
-                return;
-            }
-            
-            const level = getLevelInfo(student.xp);
-            const progressPercentage = getProgressPercentage(student.xp, level);
-
-            card.querySelector('.xp-current').textContent = student.xp;
-
-            const levelElement = card.querySelector('.student-level');
-            levelElement.textContent = level.name;
-            levelElement.className = `student-level level-${level.class}`;
-
-            const progressBar = card.querySelector('.progress-bar');
-            progressBar.style.width = `${progressPercentage}%`;
-            progressBar.className = `progress-bar progress-${level.class}`;
-        }
-
-        // Funções para o modal de edição de XP
-        function openEditModal(studentName) {
-            if (!isAdminMode) {
-                alert("Access denied! Administrator mode required to edit XP.");
-                return;
-            }
-            
-            currentEditingStudent = studentName;
-            const modal = document.getElementById('editModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const xpInput = document.getElementById('xpInput');
-            
-            modalTitle.textContent = `Edit ${students[studentName].name}'s XP`;
-            xpInput.value = students[studentName].xp;
-            
-            modal.style.display = 'flex';
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('editModal');
-            modal.style.display = 'none';
-            currentEditingStudent = null;
-        }
-
-        function modifyXpValue(amount) {
-            const xpInput = document.getElementById('xpInput');
-            let newValue = parseInt(xpInput.value) + amount;
-            
-            // Não permitir valores negativos
-            if (newValue < 0) newValue = 0;
-            
-            xpInput.value = newValue;
-        }
-
-        function saveXpChanges() {
-            if (!currentEditingStudent) return;
-            
-            const xpInput = document.getElementById('xpInput');
-            const newXp = parseInt(xpInput.value);
-            
-            if (isNaN(newXp) || newXp < 0) {
-                alert("Please enter a valid XP value (0 or higher).");
-                return;
-            }
-            
-            const student = students[currentEditingStudent];
-            const oldLevel = getLevelInfo(student.xp);
-            
-            student.xp = newXp;
-            student.lastUpdated = new Date().toISOString();
-            
-            const newLevel = getLevelInfo(student.xp);
-
-            updateStudentDisplay(currentEditingStudent);
-            saveData();
-
-            if (oldLevel.name !== newLevel.name) {
-                showCelebration('🎉');
-                
-                const card = document.querySelector(`[data-student="${currentEditingStudent}"]`);
-                card.style.transform = 'scale(1.05)';
-                card.style.boxShadow = '0 20px 50px rgba(0,0,0,0.3)';
-                
-                setTimeout(() => {
-                    card.style.transform = '';
-                    card.style.boxShadow = '';
-                }, 500);
-            } else {
-                showCelebration('✨');
-            }
-            
-            closeModal();
-        }
-
-        function showCelebration(emoji) {
-            const celebration = document.createElement('div');
-            celebration.className = 'celebration';
-            celebration.textContent = emoji;
-            document.body.appendChild(celebration);
-
-            setTimeout(() => {
-                if (document.body.contains(celebration)) {
-                    document.body.removeChild(celebration);
-                }
-            }, 1000);
-        }
-
-        function toggleAdmin() {
-            try {
-                if (!isAdminMode) {
-                    const password = prompt("Enter administrator password:");
-                    
-                    if (password === adminPassword) {
-                        isAdminMode = true;
-                        saveAdminStatus();
-                        updateAdminUI();
-                        showCelebration('🔓');
-                    } else if (password !== null) {
-                        alert("Incorrect password!");
+                // Poll for changes every 3 seconds
+                setInterval(async () => {
+                    try {
+                        const response = await fetch(`${this.firebaseUrl}students.json`);
+                        if (response.ok) {
+                            const data = await response.json();
+                            const serverStudents = data ? Object.keys(data).map(key => ({...data[key], id: key})) : [];
+                            
+                            // Check if there are changes
+                            if (JSON.stringify(serverStudents) !== JSON.stringify(this.students)) {
+                                this.students = serverStudents;
+                                this.renderStudents();
+                                this.updateSelects();
+                            }
+                            
+                            if (this.connectionStatus !== 'connected') {
+                                this.updateConnectionStatus('connected');
+                            }
+                        }
+                    } catch (error) {
+                        if (this.connectionStatus !== 'disconnected') {
+                            this.updateConnectionStatus('disconnected');
+                        }
                     }
-                } else {
-                    isAdminMode = false;
-                    saveAdminStatus();
-                    updateAdminUI();
-                    showCelebration('🔒');
-                }
-            } catch (error) {
-                console.error("Error in toggleAdmin:", error);
-                alert("Error: " + error.message);
+                }, 3000);
             }
-        }
 
-        function updateAdminUI() {
-            try {
+            async saveToFirebase() {
+                if (!this.isOnlineMode) return;
+                
+                try {
+                    const studentsData = {};
+                    this.students.forEach(student => {
+                        studentsData[student.id] = {
+                            name: student.name,
+                            xp: student.xp,
+                            lastUpdated: new Date().toISOString()
+                        };
+                    });
+
+                    const response = await fetch(`${this.firebaseUrl}students.json`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(studentsData)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Failed to save: ${response.statusText}`);
+                    }
+
+                    this.showSaveIndicator();
+                } catch (error) {
+                    console.error('Error saving to Firebase:', error);
+                    this.updateConnectionStatus('disconnected');
+                }
+            }
+
+            toggleAdminMode() {
+                this.isAdminMode = !this.isAdminMode;
                 const adminButton = document.getElementById('adminToggle');
                 const adminStatus = document.getElementById('adminStatus');
-                const allButtonContainers = document.querySelectorAll('.buttons-container');
+                const addStudentSection = document.getElementById('addStudentSection');
 
-                if (!adminButton || !adminStatus) {
-                    console.error("Admin elements not found!");
+                if (this.isAdminMode) {
+                    adminButton.classList.add('active');
+                    adminButton.textContent = '🔓 Admin Mode ON';
+                    adminStatus.textContent = 'Admin controls enabled';
+                    adminStatus.classList.add('active');
+                    addStudentSection.classList.add('visible');
+                } else {
+                    adminButton.classList.remove('active');
+                    adminButton.textContent = '🔧 Admin Mode';
+                    adminStatus.textContent = 'Click to enable admin controls';
+                    adminStatus.classList.remove('active');
+                    addStudentSection.classList.remove('visible');
+                }
+
+                this.renderStudents();
+            }
+
+            addStudent() {
+                const nameInput = document.getElementById('newStudentName');
+                const name = nameInput.value.trim();
+
+                if (!name) {
+                    alert('Please enter a student name!');
                     return;
                 }
 
-                if (isAdminMode) {
-                    adminButton.textContent = '🔓 Administrator Mode Active';
-                    adminButton.classList.add('active');
-                    adminStatus.textContent = 'Administrator Mode - You can add XP';
-                    adminStatus.classList.add('active');
-                    
-                    allButtonContainers.forEach(container => {
-                        container.classList.remove('disabled');
-                    });
-                } else {
-                    adminButton.textContent = '🔒 Administrator Mode';
-                    adminButton.classList.remove('active');
-                    adminStatus.textContent = 'View Mode - Only teachers can add XP';
-                    adminStatus.classList.remove('active');
-                    
-                    allButtonContainers.forEach(container => {
-                        container.classList.add('disabled');
-                    });
+                if (this.students.find(s => s.name.toLowerCase() === name.toLowerCase())) {
+                    alert('A student with this name already exists!');
+                    return;
                 }
-            } catch (error) {
-                console.error("Error in updateAdminUI:", error);
+
+                const newStudent = {
+                    id: Date.now().toString(),
+                    name: name,
+                    xp: 0
+                };
+
+                this.students.push(newStudent);
+                this.saveStudents();
+                this.renderStudents();
+                this.updateSelects();
+                nameInput.value = '';
             }
-        }
 
-        function addXP(studentName, xpAmount) {
-            if (!isAdminMode) {
-                alert("Access denied! Administrator mode required to add XP.");
-                return;
+            addXpToStudent(studentId, xpAmount) {
+                const student = this.students.find(s => s.id === studentId);
+                if (student) {
+                    const oldLevel = this.getStudentLevel(student.xp);
+                    student.xp += xpAmount;
+                    
+                    if (student.xp < 0) {
+                        student.xp = 0;
+                    }
+                    
+                    const newLevel = this.getStudentLevel(student.xp);
+                    
+                    this.saveStudents();
+                    this.renderStudents();
+                    
+                    if (oldLevel !== newLevel && xpAmount > 0) {
+                        this.showLevelUpCelebration(student.name, newLevel);
+                    }
+                }
             }
 
-            const student = students[studentName];
-            const oldLevel = getLevelInfo(student.xp);
-            
-            student.xp += xpAmount;
-            student.lastUpdated = new Date().toISOString();
-            
-            const newLevel = getLevelInfo(student.xp);
+            deleteStudent(studentId) {
+                if (confirm('Are you sure you want to delete this student? This action cannot be undone.')) {
+                    this.students = this.students.filter(s => s.id !== studentId);
+                    this.saveStudents();
+                    this.renderStudents();
+                    this.updateSelects();
+                }
+            }
 
-            updateStudentDisplay(studentName);
-            saveData();
+            editStudent(studentId) {
+                const student = this.students.find(s => s.id === studentId);
+                if (student) {
+                    this.currentEditStudent = studentId;
+                    document.getElementById('editStudentName').value = student.name;
+                    document.getElementById('editStudentXp').value = student.xp;
+                    document.getElementById('editModal').style.display = 'flex';
+                }
+            }
 
-            if (oldLevel.name !== newLevel.name) {
-                showCelebration('🎉');
+            saveStudentEdit() {
+                const name = document.getElementById('editStudentName').value.trim();
+                const xp = parseInt(document.getElementById('editStudentXp').value) || 0;
+
+                if (!name) {
+                    alert('Please enter a student name!');
+                    return;
+                }
+
+                if (xp < 0 || xp > 9999) {
+                    alert('XP must be between 0 and 9999!');
+                    return;
+                }
+
+                const student = this.students.find(s => s.id === this.currentEditStudent);
+                if (student) {
+                    const existingStudent = this.students.find(s => 
+                        s.name.toLowerCase() === name.toLowerCase() && s.id !== this.currentEditStudent
+                    );
+                    
+                    if (existingStudent) {
+                        alert('A student with this name already exists!');
+                        return;
+                    }
+
+                    student.name = name;
+                    student.xp = xp;
+                    
+                    this.saveStudents();
+                    this.renderStudents();
+                    this.updateSelects();
+                    this.closeModal();
+                }
+            }
+
+            addXpInModal(amount) {
+                const xpInput = document.getElementById('editStudentXp');
+                const currentXp = parseInt(xpInput.value) || 0;
+                const newXp = Math.max(0, Math.min(9999, currentXp + amount));
+                xpInput.value = newXp;
+            }
+
+            closeModal() {
+                document.getElementById('editModal').style.display = 'none';
+                this.currentEditStudent = null;
+            }
+
+            getStudentLevel(xp) {
+                if (xp >= this.levelThresholds.master.min) return 'master';
+                if (xp >= this.levelThresholds.hero.min) return 'hero';
+                if (xp >= this.levelThresholds.adventurer.min) return 'adventurer';
+                return 'beginner';
+            }
+
+            getLevelDisplayName(level) {
+                const names = {
+                    beginner: 'Beginner',
+                    adventurer: 'Adventurer',
+                    hero: 'Hero',
+                    master: 'Master'
+                };
+                return names[level];
+            }
+
+            getProgressToNextLevel(xp) {
+                const level = this.getStudentLevel(xp);
                 
-                const card = document.querySelector(`[data-student="${studentName}"]`);
-                card.style.transform = 'scale(1.05)';
-                card.style.boxShadow = '0 20px 50px rgba(0,0,0,0.3)';
+                if (level === 'master') {
+                    return { percent: 100, current: xp, max: xp };
+                }
+                
+                let nextThreshold;
+                if (level === 'beginner') nextThreshold = this.levelThresholds.adventurer.min;
+                else if (level === 'adventurer') nextThreshold = this.levelThresholds.hero.min;
+                else if (level === 'hero') nextThreshold = this.levelThresholds.master.min;
+                
+                const currentThreshold = this.levelThresholds[level].min;
+                const progress = xp - currentThreshold;
+                const total = nextThreshold - currentThreshold;
+                const percent = (progress / total) * 100;
+                
+                return { percent, current: progress, max: total };
+            }
+
+            renderStudents() {
+                const container = document.getElementById('studentsContainer');
+                
+                if (this.students.length === 0) {
+                    container.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #7f8c8d;">
+                            <h3>No students yet!</h3>
+                            <p>Enable admin mode and add your first student to get started.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Sort students by XP (highest first)
+                const sortedStudents = [...this.students].sort((a, b) => b.xp - a.xp);
+
+                container.innerHTML = sortedStudents.map((student, index) => {
+                    const level = this.getStudentLevel(student.xp);
+                    const progress = this.getProgressToNextLevel(student.xp);
+                    
+                    return `
+                        <div class="student-card">
+                            <div class="student-name">
+                                ${index < 3 ? ['🥇', '🥈', '🥉'][index] : ''} ${student.name}
+                            </div>
+                            <div class="student-level level-${level}">
+                                ${this.getLevelDisplayName(level)}
+                            </div>
+                            
+                            <div class="xp-info">
+                                <div class="xp-current">${student.xp}</div>
+                                <div class="xp-label">Total XP</div>
+                            </div>
+                            
+                            <div class="progress-container">
+                                <div class="progress-bar progress-${level}" 
+                                     style="width: ${progress.percent}%"></div>
+                            </div>
+                            
+                            <div class="xp-label">
+                                ${level === 'master' ? 'Max Level!' : `${progress.current}/${progress.max} to next level`}
+                            </div>
+                            
+                            <div class="buttons-container ${!this.isAdminMode ? 'disabled' : ''}">
+                                <button class="xp-button btn-10" onclick="englishQuest.addXpToStudent('${student.id}', 10)">+10 XP</button>
+                                <button class="xp-button btn-15" onclick="englishQuest.addXpToStudent('${student.id}', 15)">+15 XP</button>
+                                <button class="xp-button btn-20" onclick="englishQuest.addXpToStudent('${student.id}', 20)">+20 XP</button>
+                                <button class="xp-button btn-edit" onclick="englishQuest.editStudent('${student.id}')">✏️ Edit</button>
+                                <button class="xp-button btn-delete" onclick="englishQuest.deleteStudent('${student.id}')">🗑️ Delete</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            updateSelects() {
+                const selects = document.querySelectorAll('.mission-select');
+                
+                selects.forEach(select => {
+                    const currentValue = select.value;
+                    const sortedStudents = [...this.students].sort((a, b) => a.name.localeCompare(b.name));
+                    
+                    select.innerHTML = '<option value="">Select student...</option>' +
+                        sortedStudents.map(student => 
+                            `<option value="${student.id}" ${currentValue === student.id ? 'selected' : ''}>${student.name}</option>`
+                        ).join('');
+                });
+            }
+
+            showCelebration() {
+                const celebration = document.createElement('div');
+                celebration.className = 'celebration';
+                celebration.textContent = '🎉';
+                document.body.appendChild(celebration);
                 
                 setTimeout(() => {
-                    card.style.transform = '';
-                    card.style.boxShadow = '';
-                }, 500);
-            } else {
-                showCelebration('✨');
+                    document.body.removeChild(celebration);
+                }, 1000);
             }
-        }
 
-        // Event listener para detectar mudanças em outras abas/janelas
-        function setupStorageEventListener() {
-            window.addEventListener('storage', function(e) {
-                if (e.key === STORAGE_KEY && e.newValue) {
-                    console.log("Dados atualizados em outra aba, recarregando...");
-                    
-                    try {
-                        const newData = JSON.parse(e.newValue);
-                        Object.keys(newData.students).forEach(studentKey => {
-                            if (students[studentKey]) {
-                                students[studentKey].xp = newData.students[studentKey].xp;
-                                students[studentKey].lastUpdated = newData.students[studentKey].lastUpdated;
-                                updateStudentDisplay(studentKey);
-                            }
-                        });
-                        
-                        updateLastUpdatedDisplay();
-                    } catch (error) {
-                        console.error("Erro ao processar atualização de storage:", error);
-                    }
-                }
+            showLevelUpCelebration(studentName, newLevel) {
+                const celebration = document.createElement('div');
+                celebration.className = 'celebration';
+                celebration.innerHTML = `🏆<br><span style="font-size: 1rem;">${studentName}<br>Level Up!<br>${this.getLevelDisplayName(newLevel)}</span>`;
+                celebration.style.fontSize = '3rem';
+                document.body.appendChild(celebration);
                 
-                if (e.key === ADMIN_KEY) {
-                    console.log("Status de admin atualizado em outra aba");
-                    const wasAdmin = isAdminMode;
-                    loadAdminStatus();
-                    
-                    if (wasAdmin !== isAdminMode) {
-                        updateAdminUI();
-                        renderStudentCards();
-                    }
+                setTimeout(() => {
+                    document.body.removeChild(celebration);
+                }, 2000);
+            }
+
+            showSaveIndicator() {
+                const indicator = document.getElementById('saveIndicator');
+                indicator.classList.add('visible');
+                this.updateLastUpdated();
+                
+                setTimeout(() => {
+                    indicator.classList.remove('visible');
+                }, 3000);
+            }
+
+            updateLastUpdated() {
+                const now = new Date().toLocaleString();
+                document.getElementById('lastUpdated').textContent = `Last updated: ${now}`;
+            }
+
+            saveStudents() {
+                if (this.isOnlineMode) {
+                    this.saveToFirebase();
+                } else {
+                    this.saveStudentsLocal();
                 }
-            });
+            }
+
+            loadStudentsLocal() {
+                try {
+                    const saved = localStorage.getItem('englishQuestStudents');
+                    return saved ? JSON.parse(saved) : [];
+                } catch (error) {
+                    console.error('Error loading students:', error);
+                    return [];
+                }
+            }
+
+            saveStudentsLocal() {
+                try {
+                    localStorage.setItem('englishQuestStudents', JSON.stringify(this.students));
+                    this.showSaveIndicator();
+                } catch (error) {
+                    console.error('Error saving students:', error);
+                    alert('Error saving data. Please try again.');
+                }
+            }
         }
 
-        // Fechar o modal clicando fora dele
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('editModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        });
+        // Initialize the application
+        const englishQuest = new EnglishQuest();
 
-        // Inicializar
-        window.onload = function() {
-            console.log("Page loaded, initializing...");
-            
-            // Carregar dados salvos
-            loadData();
-            
-            // Carregar status de admin
-            loadAdminStatus();
-            
-            // Renderizar os cards dos estudantes
-            renderStudentCards();
-            
-            // Atualizar a UI de admin
-            updateAdminUI();
-            
-            // Configurar listener para mudanças de storage
-            setupStorageEventListener();
-            
-            // Atualizar a informação de última atualização
-            updateLastUpdatedDisplay();
-            
-            console.log("Initialization complete");
-        };
-
-        // Funções globais
-        window.toggleAdmin = toggleAdmin;
-        window.addXP = addXP;
-        window.openEditModal = openEditModal;
-        window.closeModal = closeModal;
-        window.modifyXpValue = modifyXpValue;
-        window.saveXpChanges = saveXpChanges;
+        // Expose for debugging
+        window.englishQuest = englishQuest;
     </script>
 </body>
 </html>
-

@@ -837,6 +837,11 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 const isStudentView = urlParams.get('view') === 'student';
                 
+                // Update page title for student view
+                if (isStudentView) {
+                    document.title = 'English Quest - Student Dashboard';
+                }
+                
                 // Try to load system configuration from URL parameters (for students)
                 const firebaseUrl = urlParams.get('firebase');
                 

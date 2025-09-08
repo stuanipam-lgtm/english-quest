@@ -56,22 +56,12 @@
             transition: all 0.3s ease;
         }
 
-        .status-connected {
-            background: linear-gradient(45deg, #27ae60, #229954);
-            color: white;
-        }
+        .status-connected { background: linear-gradient(45deg, #27ae60, #229954); color: white; }
+        .status-connecting { background: linear-gradient(45deg, #f39c12, #e67e22); color: white; }
+        .status-disconnected { background: linear-gradient(45deg, #e74c3c, #c0392b); color: white; }
+        .status-offline { background: linear-gradient(45deg, #95a5a6, #7f8c8d); color: white; }
 
-        .status-connecting {
-            background: linear-gradient(45deg, #f39c12, #e67e22);
-            color: white;
-        }
-
-        .status-disconnected {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            color: white;
-        }
-
-        .firebase-setup {
+        .setup-section {
             background: rgba(255,255,255,0.95);
             border-radius: 20px;
             padding: 25px;
@@ -80,13 +70,9 @@
             text-align: center;
         }
 
-        .firebase-setup h3 {
+        .setup-section h3 {
             color: #2c3e50;
             margin-bottom: 20px;
-        }
-
-        .firebase-setup.hidden {
-            display: none;
         }
 
         .setup-input {
@@ -475,34 +461,6 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
-        .save-indicator {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 8px 15px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            opacity: 0;
-            transform: translateY(20px);
-            color: #2c3e50;
-        }
-
-        .save-indicator.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .last-updated {
-            text-align: center;
-            color: rgba(255,255,255,0.7);
-            font-size: 0.8rem;
-            margin-top: 10px;
-        }
-
-        /* Modal de edição */
         .modal {
             display: none;
             position: fixed;
@@ -577,16 +535,30 @@
             color: white;
         }
 
-        .modal-btn.add {
-            background: #3498db;
-            color: white;
-            margin-top: 10px;
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            z-index: 1000;
+            pointer-events: none;
+            animation: celebrate 1s ease-out;
         }
 
-        .modal-btn.subtract {
-            background: #e74c3c;
-            color: white;
-            margin-top: 10px;
+        @keyframes celebrate {
+            0% { 
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% { 
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% { 
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1);
+            }
         }
 
         @media (max-width: 768px) {
@@ -626,54 +598,6 @@
                 width: 100%;
             }
         }
-
-        .celebration {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 4rem;
-            z-index: 1000;
-            pointer-events: none;
-            animation: celebrate 1s ease-out;
-        }
-
-        @keyframes celebrate {
-            0% { 
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.5);
-            }
-            50% { 
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.2);
-            }
-            100% { 
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(1);
-            }
-        }
-
-        .instruction-box {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .instruction-box h4 {
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-        }
-
-        .instruction-box ol {
-            padding-left: 20px;
-        }
-
-        .instruction-box li {
-            margin: 5px 0;
-        }
     </style>
 </head>
 <body>
@@ -683,33 +607,39 @@
             <p class="subtitle">Monthly Challenge</p>
         </div>
 
-        <!-- Status de conexão -->
         <div id="connectionStatus" class="connection-status status-connecting">
-            🔄 Connecting...
+            🔄 Starting...
         </div>
 
-        <!-- Setup do Firebase -->
-        <div id="firebaseSetup" class="firebase-setup">
-            <h3>🔧 Firebase Configuration</h3>
-            <div class="instruction-box">
-                <h4>📋 Setup Instructions:</h4>
-                <ol>
-                    <li>Go to <a href="https://console.firebase.google.com" target="_blank" style="color: #fff;">Firebase Console</a></li>
-                    <li>Create a new project or select existing</li>
-                    <li>Go to "Realtime Database" → Create database</li>
-                    <li>Set rules to: <code>{ "rules": { ".read": true, ".write": true } }</code></li>
-                    <li>Copy your database URL and paste below</li>
-                </ol>
+        <!-- Setup inicial -->
+        <div id="setupSection" class="setup-section">
+            <h3>🔧 Quick Setup</h3>
+            <p style="color: #7f8c8d; margin-bottom: 20px;">Choose how you want to run English Quest</p>
+            
+            <div style="margin: 20px 0;">
+                <input type="password" id="adminPassword" class="setup-input" placeholder="Set Admin Password (min 4 characters)" 
+                       title="Admin password for controlling the system" minlength="4" maxlength="50">
             </div>
-            <input type="url" id="firebaseUrl" class="setup-input" placeholder="https://your-project-default-rtdb.firebaseio.com/" 
-                   title="Firebase Realtime Database URL">
-            <br>
-            <button id="connectFirebase" class="setup-button">🚀 Connect to Firebase</button>
-            <button id="useOffline" class="setup-button" style="background: linear-gradient(45deg, #95a5a6, #7f8c8d);">
-                📱 Use Offline Mode
+            
+            <button id="startOffline" class="setup-button" style="background: linear-gradient(45deg, #2ecc71, #27ae60);">
+                🚀 Start Now (Offline Mode)
             </button>
+            
+            <details style="margin-top: 20px; text-align: left;">
+                <summary style="cursor: pointer; color: #3498db; font-weight: bold;">⚙️ Advanced: Connect to Firebase</summary>
+                <div style="margin-top: 15px;">
+                    <input type="url" id="firebaseUrl" class="setup-input" placeholder="https://your-project-default-rtdb.firebaseio.com/" 
+                           title="Firebase Realtime Database URL">
+                    <button id="connectFirebase" class="setup-button">🔗 Connect to Firebase</button>
+                </div>
+            </details>
+            
+            <div style="margin-top: 15px; padding: 10px; background: rgba(52, 152, 219, 0.1); border-radius: 8px; font-size: 0.9rem; color: #2c3e50;">
+                <strong>💡 Tip:</strong> Start with Offline Mode - you can always add Firebase later!
+            </div>
         </div>
 
+        <!-- Conteúdo principal -->
         <div id="mainContent" style="display: none;">
             <div class="missions-section">
                 <h3>🎯 Missions</h3>
@@ -721,28 +651,28 @@
                             <div class="mission-item">
                                 <span class="mission-text">Speak at least 2 full sentences in English</span>
                                 <div class="mission-controls">
-                                    <select class="mission-select" data-mission="speak" aria-label="Select student for speaking mission"></select>
+                                    <select class="mission-select" data-mission="speak"></select>
                                     <button class="xp-button btn-10" data-xp="10" data-mission="speak">+10 XP</button>
                                 </div>
                             </div>
                             <div class="mission-item">
                                 <span class="mission-text">Complete the exercises quickly</span>
                                 <div class="mission-controls">
-                                    <select class="mission-select" data-mission="exercises" aria-label="Select student for exercises mission"></select>
+                                    <select class="mission-select" data-mission="exercises"></select>
                                     <button class="xp-button btn-15" data-xp="15" data-mission="exercises">+15 XP</button>
                                 </div>
                             </div>
                             <div class="mission-item">
                                 <span class="mission-text">Correct one of your sentences with the teacher's help</span>
                                 <div class="mission-controls">
-                                    <select class="mission-select" data-mission="correct" aria-label="Select student for correction mission"></select>
+                                    <select class="mission-select" data-mission="correct"></select>
                                     <button class="xp-button btn-10" data-xp="10" data-mission="correct">+10 XP</button>
                                 </div>
                             </div>
                             <div class="mission-item">
                                 <span class="mission-text">Take part in a mini roleplay</span>
                                 <div class="mission-controls">
-                                    <select class="mission-select" data-mission="roleplay" aria-label="Select student for roleplay mission"></select>
+                                    <select class="mission-select" data-mission="roleplay"></select>
                                     <button class="xp-button btn-20" data-xp="20" data-mission="roleplay">+20 XP</button>
                                 </div>
                             </div>
@@ -755,28 +685,28 @@
                             <div class="mission-item">
                                 <span class="mission-text">Do your weekly homework before the next class</span>
                                 <div class="mission-controls">
-                                    <select class="mission-select" data-mission="homework" aria-label="Select student for homework mission"></select>
+                                    <select class="mission-select" data-mission="homework"></select>
                                     <button class="xp-button btn-10" data-xp="10" data-mission="homework">+10 XP</button>
                                 </div>
                             </div>
                             <div class="mission-item">
                                 <span class="mission-text">Practice pronunciation with online tools</span>
                                 <div class="mission-controls">
-                                    <select class="mission-select" data-mission="pronunciation" aria-label="Select student for pronunciation mission"></select>
+                                    <select class="mission-select" data-mission="pronunciation"></select>
                                     <button class="xp-button btn-15" data-xp="15" data-mission="pronunciation">+15 XP</button>
                                 </div>
                             </div>
                             <div class="mission-item">
                                 <span class="mission-text">Watch a 10-minute English video with subtitles</span>
                                 <div class="mission-controls">
-                                    <select class="mission-select" data-mission="video" aria-label="Select student for video mission"></select>
+                                    <select class="mission-select" data-mission="video"></select>
                                     <button class="xp-button btn-10" data-xp="10" data-mission="video">+10 XP</button>
                                 </div>
                             </div>
                             <div class="mission-item">
                                 <span class="mission-text">Write 5 sentences using new vocabulary</span>
                                 <div class="mission-controls">
-                                    <select class="mission-select" data-mission="writing" aria-label="Select student for writing mission"></select>
+                                    <select class="mission-select" data-mission="writing"></select>
                                     <button class="xp-button btn-20" data-xp="20" data-mission="writing">+20 XP</button>
                                 </div>
                             </div>
@@ -807,31 +737,20 @@
                 <span class="threshold-item level-hero">Hero: 151-300 XP</span>
                 <span class="threshold-item level-master">Master: 301+ XP</span>
             </div>
-
-            <div class="last-updated" id="lastUpdated">
-                Last updated: Never
-            </div>
         </div>
     </div>
 
-    <!-- Modal de edição -->
-    <div id="editModal" class="modal">
+    <!-- Modal de senha -->
+    <div id="passwordModal" class="modal">
         <div class="modal-content">
-            <h2>Edit Student</h2>
-            <input type="text" id="editStudentName" class="modal-input" placeholder="Student Name" maxlength="30">
-            <input type="number" id="editStudentXp" class="modal-input" placeholder="XP Amount" min="0" max="9999">
+            <h2>🔐 Admin Access</h2>
+            <p style="color: #7f8c8d; margin-bottom: 20px;">Enter admin password</p>
+            <input type="password" id="loginPassword" class="modal-input" placeholder="Enter password" maxlength="50">
             <div class="modal-buttons">
-                <button id="saveEdit" class="modal-btn confirm">Save</button>
-                <button id="cancelEdit" class="modal-btn cancel">Cancel</button>
+                <button id="loginBtn" class="modal-btn confirm">Login</button>
+                <button id="cancelBtn" class="modal-btn cancel">Cancel</button>
             </div>
-            <button id="addXpModal" class="modal-btn add">Add 10 XP</button>
-            <button id="subtractXpModal" class="modal-btn subtract">Remove 10 XP</button>
         </div>
-    </div>
-
-    <!-- Indicador de salvamento -->
-    <div id="saveIndicator" class="save-indicator">
-        ☁️ Synced to cloud
     </div>
 
     <script>
@@ -839,10 +758,10 @@
             constructor() {
                 this.students = [];
                 this.isAdminMode = false;
-                this.currentEditStudent = null;
+                this.isAuthenticated = false;
+                this.adminPassword = '';
                 this.isOnlineMode = false;
                 this.firebaseUrl = '';
-                this.connectionStatus = 'disconnected';
                 
                 this.levelThresholds = {
                     beginner: { min: 0, max: 50 },
@@ -856,35 +775,54 @@
 
             init() {
                 this.bindEvents();
-                this.checkSavedConfig();
-            }
-
-            checkSavedConfig() {
-                const savedUrl = localStorage.getItem('firebaseUrl');
-                if (savedUrl) {
-                    document.getElementById('firebaseUrl').value = savedUrl;
-                    this.connectToFirebase(savedUrl);
-                }
+                this.updateConnectionStatus('offline');
             }
 
             bindEvents() {
-                // Firebase setup
+                // Setup buttons
+                document.getElementById('startOffline').addEventListener('click', () => {
+                    const password = document.getElementById('adminPassword').value.trim();
+                    if (!password || password.length < 4) {
+                        alert('Please set an admin password (minimum 4 characters)');
+                        return;
+                    }
+                    this.startOfflineMode(password);
+                });
+
                 document.getElementById('connectFirebase').addEventListener('click', () => {
                     const url = document.getElementById('firebaseUrl').value.trim();
-                    if (url) {
-                        this.connectToFirebase(url);
-                    } else {
+                    const password = document.getElementById('adminPassword').value.trim();
+                    
+                    if (!url) {
                         alert('Please enter a Firebase URL');
+                        return;
+                    }
+                    
+                    if (!password || password.length < 4) {
+                        alert('Please set an admin password (minimum 4 characters)');
+                        return;
+                    }
+                    
+                    this.connectToFirebase(url, password);
+                });
+
+                // Admin controls
+                document.getElementById('adminToggle').addEventListener('click', () => {
+                    if (this.isAdminMode) {
+                        this.isAdminMode = false;
+                        this.updateAdminUI();
+                        this.renderStudents();
+                    } else {
+                        this.requestAdminAccess();
                     }
                 });
 
-                document.getElementById('useOffline').addEventListener('click', () => {
-                    this.startOfflineMode();
+                document.getElementById('loginBtn').addEventListener('click', () => {
+                    this.validatePassword();
                 });
 
-                // Admin toggle
-                document.getElementById('adminToggle').addEventListener('click', () => {
-                    this.toggleAdminMode();
+                document.getElementById('cancelBtn').addEventListener('click', () => {
+                    this.closePasswordModal();
                 });
 
                 // Add student
@@ -901,6 +839,11 @@
                 // Mission XP buttons
                 document.querySelectorAll('.xp-button[data-xp]').forEach(button => {
                     button.addEventListener('click', (e) => {
+                        if (!this.isAdminMode) {
+                            alert('Admin mode required to award XP!');
+                            return;
+                        }
+                        
                         const missionType = e.target.dataset.mission;
                         const xpAmount = parseInt(e.target.dataset.xp);
                         const select = document.querySelector(`select[data-mission="${missionType}"]`);
@@ -915,65 +858,28 @@
                     });
                 });
 
-                // Modal events
-                document.getElementById('saveEdit').addEventListener('click', () => {
-                    this.saveStudentEdit();
-                });
-
-                document.getElementById('cancelEdit').addEventListener('click', () => {
-                    this.closeModal();
-                });
-
-                document.getElementById('addXpModal').addEventListener('click', () => {
-                    this.addXpInModal(10);
-                });
-
-                document.getElementById('subtractXpModal').addEventListener('click', () => {
-                    this.addXpInModal(-10);
-                });
-
                 // Close modal on outside click
-                document.getElementById('editModal').addEventListener('click', (e) => {
-                    if (e.target.id === 'editModal') {
-                        this.closeModal();
+                document.getElementById('passwordModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'passwordModal') {
+                        this.closePasswordModal();
                     }
                 });
 
                 // Enter key support
-                document.getElementById('editStudentName').addEventListener('keypress', (e) => {
+                document.getElementById('loginPassword').addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
-                        this.saveStudentEdit();
-                    }
-                });
-
-                document.getElementById('editStudentXp').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        this.saveStudentEdit();
-                    }
-                });
-
-                document.getElementById('firebaseUrl').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        const url = e.target.value.trim();
-                        if (url) {
-                            this.connectToFirebase(url);
-                        }
+                        this.validatePassword();
                     }
                 });
             }
 
-            async connectToFirebase(url) {
+            async connectToFirebase(url, password) {
                 this.updateConnectionStatus('connecting');
                 
                 try {
-                    // Validate Firebase URL format
-                    if (!url.includes('firebaseio.com') && !url.includes('firebase.google.com')) {
-                        throw new Error('Invalid Firebase URL format');
-                    }
-
                     this.firebaseUrl = url.endsWith('/') ? url : url + '/';
+                    this.adminPassword = password;
                     
-                    // Test connection by trying to read data
                     const response = await fetch(`${this.firebaseUrl}students.json`);
                     
                     if (!response.ok) {
@@ -981,122 +887,63 @@
                     }
 
                     const data = await response.json();
-                    
-                    // Save configuration
-                    localStorage.setItem('firebaseUrl', this.firebaseUrl);
-                    
-                    // Load existing students or initialize empty array
                     this.students = data ? Object.keys(data).map(key => ({...data[key], id: key})) : [];
                     
                     this.isOnlineMode = true;
                     this.updateConnectionStatus('connected');
                     this.showMainContent();
-                    this.renderStudents();
-                    this.updateSelects();
-                    this.startRealtimeSync();
                     
                 } catch (error) {
                     console.error('Firebase connection error:', error);
                     this.updateConnectionStatus('disconnected');
-                    alert(`Connection failed: ${error.message}\n\nPlease check your Firebase URL and database rules.`);
+                    alert(`Connection failed: ${error.message}\n\nTrying offline mode instead...`);
+                    this.startOfflineMode(password);
                 }
             }
 
-            startOfflineMode() {
+            startOfflineMode(password) {
+                this.adminPassword = password;
+                this.students = this.loadStudents();
                 this.isOnlineMode = false;
-                this.students = this.loadStudentsLocal();
                 this.updateConnectionStatus('offline');
                 this.showMainContent();
+            }
+
+            showMainContent() {
+                document.getElementById('setupSection').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
                 this.renderStudents();
                 this.updateSelects();
             }
 
-            showMainContent() {
-                document.getElementById('firebaseSetup').style.display = 'none';
-                document.getElementById('mainContent').style.display = 'block';
-                this.updateLastUpdated();
-                this.updateAdminUI();
+            requestAdminAccess() {
+                document.getElementById('loginPassword').value = '';
+                document.getElementById('passwordModal').style.display = 'flex';
+                setTimeout(() => {
+                    document.getElementById('loginPassword').focus();
+                }, 100);
             }
 
-            updateConnectionStatus(status) {
-                const statusEl = document.getElementById('connectionStatus');
-                statusEl.className = `connection-status status-${status}`;
+            validatePassword() {
+                const enteredPassword = document.getElementById('loginPassword').value;
                 
-                const statusTexts = {
-                    connecting: '🔄 Connecting...',
-                    connected: '☁️ Connected',
-                    disconnected: '❌ Disconnected',
-                    offline: '📱 Offline Mode'
-                };
-                
-                statusEl.textContent = statusTexts[status] || status;
-                this.connectionStatus = status;
-            }
-
-            async startRealtimeSync() {
-                if (!this.isOnlineMode) return;
-                
-                // Poll for changes every 3 seconds
-                setInterval(async () => {
-                    try {
-                        const response = await fetch(`${this.firebaseUrl}students.json`);
-                        if (response.ok) {
-                            const data = await response.json();
-                            const serverStudents = data ? Object.keys(data).map(key => ({...data[key], id: key})) : [];
-                            
-                            // Check if there are changes
-                            if (JSON.stringify(serverStudents) !== JSON.stringify(this.students)) {
-                                this.students = serverStudents;
-                                this.renderStudents();
-                                this.updateSelects();
-                            }
-                            
-                            if (this.connectionStatus !== 'connected') {
-                                this.updateConnectionStatus('connected');
-                            }
-                        }
-                    } catch (error) {
-                        if (this.connectionStatus !== 'disconnected') {
-                            this.updateConnectionStatus('disconnected');
-                        }
-                    }
-                }, 3000);
-            }
-
-            async saveToFirebase() {
-                if (!this.isOnlineMode) return;
-                
-                try {
-                    const studentsData = {};
-                    this.students.forEach(student => {
-                        studentsData[student.id] = {
-                            name: student.name,
-                            xp: student.xp,
-                            lastUpdated: new Date().toISOString()
-                        };
-                    });
-
-                    const response = await fetch(`${this.firebaseUrl}students.json`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(studentsData)
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`Failed to save: ${response.statusText}`);
-                    }
-
-                    this.showSaveIndicator();
-                } catch (error) {
-                    console.error('Error saving to Firebase:', error);
-                    this.updateConnectionStatus('disconnected');
+                if (enteredPassword === this.adminPassword) {
+                    this.isAuthenticated = true;
+                    this.isAdminMode = true;
+                    this.closePasswordModal();
+                    this.updateAdminUI();
+                    this.renderStudents();
+                } else {
+                    alert('Incorrect password!');
+                    document.getElementById('loginPassword').value = '';
                 }
             }
 
-            toggleAdminMode() {
-                this.isAdminMode = !this.isAdminMode;
+            closePasswordModal() {
+                document.getElementById('passwordModal').style.display = 'none';
+            }
+
+            updateAdminUI() {
                 const adminButton = document.getElementById('adminToggle');
                 const adminStatus = document.getElementById('adminStatus');
                 const addStudentSection = document.getElementById('addStudentSection');
@@ -1114,11 +961,28 @@
                     adminStatus.classList.remove('active');
                     addStudentSection.classList.remove('visible');
                 }
+            }
 
-                this.renderStudents();
+            updateConnectionStatus(status) {
+                const statusEl = document.getElementById('connectionStatus');
+                statusEl.className = `connection-status status-${status}`;
+                
+                const statusTexts = {
+                    connecting: '🔄 Connecting...',
+                    connected: '☁️ Online',
+                    disconnected: '❌ Connection Failed',
+                    offline: '📱 Offline Mode'
+                };
+                
+                statusEl.textContent = statusTexts[status] || status;
             }
 
             addStudent() {
+                if (!this.isAdminMode) {
+                    alert('Admin mode required to add students!');
+                    return;
+                }
+
                 const nameInput = document.getElementById('newStudentName');
                 const name = nameInput.value.trim();
 
@@ -1164,72 +1028,6 @@
                         this.showLevelUpCelebration(student.name, newLevel);
                     }
                 }
-            }
-
-            deleteStudent(studentId) {
-                if (confirm('Are you sure you want to delete this student? This action cannot be undone.')) {
-                    this.students = this.students.filter(s => s.id !== studentId);
-                    this.saveStudents();
-                    this.renderStudents();
-                    this.updateSelects();
-                }
-            }
-
-            editStudent(studentId) {
-                const student = this.students.find(s => s.id === studentId);
-                if (student) {
-                    this.currentEditStudent = studentId;
-                    document.getElementById('editStudentName').value = student.name;
-                    document.getElementById('editStudentXp').value = student.xp;
-                    document.getElementById('editModal').style.display = 'flex';
-                }
-            }
-
-            saveStudentEdit() {
-                const name = document.getElementById('editStudentName').value.trim();
-                const xp = parseInt(document.getElementById('editStudentXp').value) || 0;
-
-                if (!name) {
-                    alert('Please enter a student name!');
-                    return;
-                }
-
-                if (xp < 0 || xp > 9999) {
-                    alert('XP must be between 0 and 9999!');
-                    return;
-                }
-
-                const student = this.students.find(s => s.id === this.currentEditStudent);
-                if (student) {
-                    const existingStudent = this.students.find(s => 
-                        s.name.toLowerCase() === name.toLowerCase() && s.id !== this.currentEditStudent
-                    );
-                    
-                    if (existingStudent) {
-                        alert('A student with this name already exists!');
-                        return;
-                    }
-
-                    student.name = name;
-                    student.xp = xp;
-                    
-                    this.saveStudents();
-                    this.renderStudents();
-                    this.updateSelects();
-                    this.closeModal();
-                }
-            }
-
-            addXpInModal(amount) {
-                const xpInput = document.getElementById('editStudentXp');
-                const currentXp = parseInt(xpInput.value) || 0;
-                const newXp = Math.max(0, Math.min(9999, currentXp + amount));
-                xpInput.value = newXp;
-            }
-
-            closeModal() {
-                document.getElementById('editModal').style.display = 'none';
-                this.currentEditStudent = null;
             }
 
             getStudentLevel(xp) {
@@ -1282,7 +1080,6 @@
                     return;
                 }
 
-                // Sort students by XP (highest first)
                 const sortedStudents = [...this.students].sort((a, b) => b.xp - a.xp);
 
                 container.innerHTML = sortedStudents.map((student, index) => {
@@ -1316,12 +1113,25 @@
                                 <button class="xp-button btn-10" onclick="englishQuest.addXpToStudent('${student.id}', 10)">+10 XP</button>
                                 <button class="xp-button btn-15" onclick="englishQuest.addXpToStudent('${student.id}', 15)">+15 XP</button>
                                 <button class="xp-button btn-20" onclick="englishQuest.addXpToStudent('${student.id}', 20)">+20 XP</button>
-                                <button class="xp-button btn-edit" onclick="englishQuest.editStudent('${student.id}')">✏️ Edit</button>
-                                <button class="xp-button btn-delete" onclick="englishQuest.deleteStudent('${student.id}')">🗑️ Delete</button>
+                                <button class="xp-button btn-delete" onclick="englishQuest.deleteStudent('${student.id}')">🗑️ Remove</button>
                             </div>
                         </div>
                     `;
                 }).join('');
+            }
+
+            deleteStudent(studentId) {
+                if (!this.isAdminMode) {
+                    alert('Admin mode required!');
+                    return;
+                }
+
+                if (confirm('Remove this student?')) {
+                    this.students = this.students.filter(s => s.id !== studentId);
+                    this.saveStudents();
+                    this.renderStudents();
+                    this.updateSelects();
+                }
             }
 
             updateSelects() {
@@ -1361,30 +1171,7 @@
                 }, 2000);
             }
 
-            showSaveIndicator() {
-                const indicator = document.getElementById('saveIndicator');
-                indicator.classList.add('visible');
-                this.updateLastUpdated();
-                
-                setTimeout(() => {
-                    indicator.classList.remove('visible');
-                }, 3000);
-            }
-
-            updateLastUpdated() {
-                const now = new Date().toLocaleString();
-                document.getElementById('lastUpdated').textContent = `Last updated: ${now}`;
-            }
-
-            saveStudents() {
-                if (this.isOnlineMode) {
-                    this.saveToFirebase();
-                } else {
-                    this.saveStudentsLocal();
-                }
-            }
-
-            loadStudentsLocal() {
+            loadStudents() {
                 try {
                     const saved = localStorage.getItem('englishQuestStudents');
                     return saved ? JSON.parse(saved) : [];
@@ -1394,21 +1181,17 @@
                 }
             }
 
-            saveStudentsLocal() {
+            saveStudents() {
                 try {
                     localStorage.setItem('englishQuestStudents', JSON.stringify(this.students));
-                    this.showSaveIndicator();
                 } catch (error) {
                     console.error('Error saving students:', error);
-                    alert('Error saving data. Please try again.');
                 }
             }
         }
 
         // Initialize the application
         const englishQuest = new EnglishQuest();
-
-        // Expose for debugging
         window.englishQuest = englishQuest;
     </script>
 </body>

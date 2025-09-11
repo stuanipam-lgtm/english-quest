@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Quest - Student Dashboard</title>
+    <title>English Quest - Monthly Challenge</title>
     <style>
         * {
             margin: 0;
@@ -30,7 +30,7 @@
         }
 
         .title {
-            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            font-size: clamp(3rem, 7vw, 5.5rem);
             font-weight: bold;
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
@@ -39,20 +39,9 @@
         }
 
         .subtitle {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             color: #f8f9fa;
             opacity: 0.9;
-            margin-bottom: 10px;
-        }
-
-        .student-info {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            padding: 15px;
-            margin: 15px 0;
-            text-align: center;
-            color: white;
-            backdrop-filter: blur(5px);
         }
 
         .connection-status {
@@ -65,8 +54,79 @@
             font-weight: bold;
             z-index: 1000;
             transition: all 0.3s ease;
-            background: linear-gradient(45deg, #27ae60, #229954);
+        }
+
+        .status-connected { background: linear-gradient(45deg, #27ae60, #229954); color: white; }
+        .status-connecting { background: linear-gradient(45deg, #f39c12, #e67e22); color: white; }
+        .status-disconnected { background: linear-gradient(45deg, #e74c3c, #c0392b); color: white; }
+
+        .setup-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .setup-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .instruction-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .instruction-box h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .instruction-box ol {
+            padding-left: 20px;
+        }
+
+        .instruction-box li {
+            margin: 5px 0;
+        }
+
+        .setup-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .setup-input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .setup-button {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .setup-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         .missions-section {
@@ -135,20 +195,109 @@
             margin-right: 15px;
         }
 
-        .mission-xp {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            min-width: 70px;
-            text-align: center;
+        .mission-controls { 
+            display: flex; 
+            gap: 10px; 
+            align-items: center; 
+            flex-wrap: wrap;
         }
 
-        .xp-10 { background: linear-gradient(45deg, #3498db, #2980b9); }
-        .xp-15 { background: linear-gradient(45deg, #e74c3c, #c0392b); }
-        .xp-20 { background: linear-gradient(45deg, #2ecc71, #27ae60); }
+        .mission-controls.student-view {
+            justify-content: flex-end;
+        }
+
+        .mission-select {
+            background: #fff; 
+            border: 2px solid #e0e4ef; 
+            color: #2c3e50;
+            padding: 8px 12px; 
+            border-radius: 10px; 
+            min-width: 140px; 
+            outline: none;
+            font-size: 0.85rem;
+        }
+
+        .mission-select:focus { 
+            border-color: #3498db; 
+            box-shadow: 0 0 0 3px rgba(52,152,219,.15); 
+        }
+
+        .admin-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .admin-button {
+            background: linear-gradient(45deg, #34495e, #2c3e50);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .admin-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .admin-button.active {
+            background: linear-gradient(45deg, #27ae60, #229954);
+        }
+
+        .admin-status {
+            margin-top: 10px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .admin-status.active {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .add-student-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .add-student-section.visible {
+            display: block;
+        }
+
+        .add-student-input {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 0 10px;
+            font-size: 1rem;
+            width: 200px;
+        }
+
+        .add-student-input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .add-student-btn {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
 
         .students-grid {
             display: grid;
@@ -237,6 +386,7 @@
             border-radius: 25px;
             transition: all 0.8s ease;
             position: relative;
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
         }
 
         .progress-bar::after {
@@ -260,6 +410,74 @@
         .progress-adventurer { background: linear-gradient(45deg, #f39c12, #e67e22); }
         .progress-hero { background: linear-gradient(45deg, #27ae60, #229954); }
         .progress-master { background: linear-gradient(45deg, #9b59b6, #8e44ad); }
+
+        .buttons-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .buttons-container.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .xp-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .xp-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .xp-button:active {
+            transform: translateY(0);
+        }
+
+        .xp-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .xp-display {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            display: inline-block;
+            margin: 2px;
+        }
+
+        .btn-10, .xp-10 { background: linear-gradient(45deg, #3498db, #2980b9); }
+        .btn-15, .xp-15 { background: linear-gradient(45deg, #e74c3c, #c0392b); }
+        .btn-20, .xp-20 { background: linear-gradient(45deg, #2ecc71, #27ae60); }
+        .btn-edit { 
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            margin-top: 10px;
+            width: 100%;
+        }
+        .btn-delete {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            margin-top: 5px;
+            width: 100%;
+        }
 
         .level-thresholds {
             background: rgba(255,255,255,0.9);
@@ -286,270 +504,56 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
-        .loading {
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 400px;
             text-align: center;
-            padding: 40px;
-            color: white;
-            font-size: 1.2rem;
         }
 
-        .loading::after {
-            content: '';
-            animation: loading 1.5s infinite;
+        .modal h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
         }
 
-        @keyframes loading {
-            0% { content: '.'; }
-            33% { content: '..'; }
-            66% { content: '...'; }
-            100% { content: '.'; }
+        .modal-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            text-align: center;
         }
 
-        @media (max-width: 768px) {
-            .students-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .student-card {
-                padding: 20px;
-            }
-            
-            .mission-item {
-                flex-direction: column;
-                text-align: center;
-                gap: 10px;
-            }
-            
-            .mission-text {
-                margin-right: 0;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1 class="title">English Quest</h1>
-            <p class="subtitle">Student Dashboard</p>
-            <div class="student-info">
-                <p>View your progress and compare with classmates</p>
-                <p>Your teacher will update your XP when you complete missions</p>
-            </div>
-        </div>
-
-        <div class="connection-status">
-            ☁️ Online
-        </div>
-
-        <div class="missions-section">
-            <h3>🎯 Available Missions</h3>
-            
-            <div class="missions-grid">
-                <div class="mission-category">
-                    <h4>📚 During the lesson</h4>
-                    <div class="mission-list">
-                        <div class="mission-item">
-                            <span class="mission-text">Speak at least 2 full sentences in English</span>
-                            <span class="mission-xp xp-10">+10 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Complete the exercises quickly</span>
-                            <span class="mission-xp xp-15">+15 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Correct one of your sentences with the teacher's help</span>
-                            <span class="mission-xp xp-10">+10 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Take part in a mini roleplay</span>
-                            <span class="mission-xp xp-20">+20 XP</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mission-category">
-                    <h4>🏠 Outside the lesson</h4>
-                    <div class="mission-list">
-                        <div class="mission-item">
-                            <span class="mission-text">Do your weekly homework before the next class</span>
-                            <span class="mission-xp xp-10">+10 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Practice pronunciation with online tools</span>
-                            <span class="mission-xp xp-15">+15 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Watch a 10-minute English video with subtitles</span>
-                            <span class="mission-xp xp-10">+10 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Write 5 sentences using new vocabulary</span>
-                            <span class="mission-xp xp-20">+20 XP</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="studentsContainer" class="students-grid">
-            <div class="loading">Loading student data</div>
-        </div>
-
-        <div class="level-thresholds">
-            <h3>🏆 Level Thresholds</h3>
-            <span class="threshold-item level-beginner">Beginner: 0-50 XP</span>
-            <span class="threshold-item level-adventurer">Adventurer: 51-150 XP</span>
-            <span class="threshold-item level-hero">Hero: 151-300 XP</span>
-            <span class="threshold-item level-master">Master: 301+ XP</span>
-        </div>
-    </div>
-
-    <script>
-        class EnglishQuestStudent {
-            constructor() {
-                this.students = [];
-                this.firebaseUrl = 'https://english-quest1-default-rtdb.firebaseio.com/';
-                this.syncInterval = null;
-                
-                this.levelThresholds = {
-                    beginner: { min: 0, max: 50 },
-                    adventurer: { min: 51, max: 150 },
-                    hero: { min: 151, max: 300 },
-                    master: { min: 301, max: Infinity }
-                };
-                
-                this.init();
-            }
-
-            init() {
-                this.loadStudentsFromFirebase();
-                this.startRealtimeSync();
-            }
-
-            async loadStudentsFromFirebase() {
-                try {
-                    const response = await fetch(`${this.firebaseUrl}/students.json`);
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-
-                    const data = await response.json();
-                    this.students = data ? Object.keys(data).map(key => ({...data[key], id: key})) : [];
-                    
-                    this.renderStudents();
-                    return true;
-                } catch (error) {
-                    console.error('Firebase load error:', error);
-                    this.showError();
-                    return false;
-                }
-            }
-
-            startRealtimeSync() {
-                // Sync every 5 seconds
-                this.syncInterval = setInterval(async () => {
-                    await this.loadStudentsFromFirebase();
-                }, 5000);
-            }
-
-            getStudentLevel(xp) {
-                if (xp >= this.levelThresholds.master.min) return 'master';
-                if (xp >= this.levelThresholds.hero.min) return 'hero';
-                if (xp >= this.levelThresholds.adventurer.min) return 'adventurer';
-                return 'beginner';
-            }
-
-            getLevelDisplayName(level) {
-                const names = {
-                    beginner: 'Beginner',
-                    adventurer: 'Adventurer',
-                    hero: 'Hero',
-                    master: 'Master'
-                };
-                return names[level];
-            }
-
-            getProgressToNextLevel(xp) {
-                const level = this.getStudentLevel(xp);
-                
-                if (level === 'master') {
-                    return { percent: 100, current: xp, max: xp };
-                }
-                
-                let nextThreshold;
-                if (level === 'beginner') nextThreshold = this.levelThresholds.adventurer.min;
-                else if (level === 'adventurer') nextThreshold = this.levelThresholds.hero.min;
-                else if (level === 'hero') nextThreshold = this.levelThresholds.master.min;
-                
-                const currentThreshold = this.levelThresholds[level].min;
-                const progress = xp - currentThreshold;
-                const total = nextThreshold - currentThreshold;
-                const percent = (progress / total) * 100;
-                
-                return { percent, current: progress, max: total };
-            }
-
-            renderStudents() {
-                const container = document.getElementById('studentsContainer');
-                
-                if (this.students.length === 0) {
-                    container.innerHTML = `
-                        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #7f8c8d;">
-                            <h3>No students found!</h3>
-                            <p>The teacher will add students soon.</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                const sortedStudents = [...this.students].sort((a, b) => b.xp - a.xp);
-
-                container.innerHTML = sortedStudents.map((student, index) => {
-                    const level = this.getStudentLevel(student.xp);
-                    const progress = this.getProgressToNextLevel(student.xp);
-                    
-                    return `
-                        <div class="student-card">
-                            <div class="student-name">
-                                ${index < 3 ? ['🥇', '🥈', '🥉'][index] : ''} ${student.name}
-                            </div>
-                            <div class="student-level level-${level}">
-                                ${this.getLevelDisplayName(level)}
-                            </div>
-                            
-                            <div class="xp-info">
-                                <div class="xp-current">${student.xp}</div>
-                                <div class="xp-label">Total XP</div>
-                            </div>
-                            
-                            <div class="progress-container">
-                                <div class="progress-bar progress-${level}" 
-                                     style="width: ${progress.percent}%"></div>
-                            </div>
-                            
-                            <div class="xp-label">
-                                ${level === 'master' ? 'Max Level!' : `${progress.current}/${progress.max} to next level`}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-
-            showError() {
-                const container = document.getElementById('studentsContainer');
-                container.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #e74c3c;">
-                        <h3>Connection Error</h3>
-                        <p>Unable to load student data. Please check your connection and try again.</p>
-                    </div>
-                `;
-            }
+        .modal-input:focus {
+            border-color: #3498db;
+            outline: none;
         }
 
-        // Initialize the application
-        const englishQuest = new EnglishQuestStudent();
-    </script>
-</body>
-</html>
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+           

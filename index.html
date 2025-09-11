@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>English Quest - Student Dashboard</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -19,15 +15,8 @@
             color: #333;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 40px; }
 
         .title {
             font-size: clamp(2.5rem, 7vw, 4.5rem);
@@ -38,12 +27,7 @@
             letter-spacing: 2px;
         }
 
-        .subtitle {
-            font-size: 1.8rem;
-            color: #f8f9fa;
-            opacity: 0.9;
-            margin-bottom: 10px;
-        }
+        .subtitle { font-size: 1.8rem; color: #f8f9fa; opacity: 0.9; margin-bottom: 10px; }
 
         .student-info {
             background: rgba(255, 255, 255, 0.2);
@@ -56,461 +40,177 @@
         }
 
         .connection-status {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            z-index: 1000;
+            position: fixed; top: 20px; right: 20px;
+            padding: 8px 15px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: bold; z-index: 1000;
             transition: all 0.3s ease;
-            background: linear-gradient(45deg, #27ae60, #229954);
-            color: white;
+            background: linear-gradient(45deg, #27ae60, #229954); color: white;
         }
 
         .admin-toggle {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            padding: 10px 15px;
-            border-radius: 25px;
+            position: fixed; top: 20px; left: 20px;
+            padding: 10px 15px; border-radius: 25px;
             background: linear-gradient(45deg, #e74c3c, #c0392b);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.9rem;
-            z-index: 1001;
+            color: white; border: none; cursor: pointer;
+            font-weight: bold; font-size: 0.9rem; z-index: 1001;
             transition: all 0.3s ease;
         }
-
-        .admin-toggle:hover {
-            transform: scale(1.05);
-        }
+        .admin-toggle:hover { transform: scale(1.05); }
 
         .admin-panel {
             display: none;
             background: rgba(255,255,255,0.98);
-            border-radius: 20px;
-            padding: 25px;
-            margin: 20px 0;
+            border-radius: 20px; padding: 25px; margin: 20px 0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             border: 3px solid #e74c3c;
         }
-
-        .admin-panel.active {
-            display: block;
-        }
+        .admin-panel.active { display: block; }
 
         .admin-header {
-            text-align: center;
-            color: #e74c3c;
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            font-weight: bold;
+            text-align: center; color: #e74c3c; font-size: 1.8rem;
+            margin-bottom: 25px; font-weight: bold;
         }
 
         .admin-section {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 15px;
-            border-left: 5px solid #e74c3c;
+            margin-bottom: 30px; padding: 20px; background: #f8f9fa;
+            border-radius: 15px; border-left: 5px solid #e74c3c;
         }
+        .admin-section h4 { color: #2c3e50; margin-bottom: 15px; font-size: 1.2rem; }
 
-        .admin-section h4 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-        }
-
-        .admin-form {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
+        .admin-form { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
         .admin-input {
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            flex: 1;
-            min-width: 150px;
+            padding: 10px; border: 2px solid #ddd; border-radius: 8px;
+            font-size: 1rem; flex: 1; min-width: 150px;
         }
-
-        .admin-input:focus {
-            outline: none;
-            border-color: #e74c3c;
-        }
+        .admin-input:focus { outline: none; border-color: #e74c3c; }
 
         .admin-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            padding: 10px 20px; border: none; border-radius: 8px;
+            cursor: pointer; font-weight: bold; transition: all 0.3s ease;
             font-size: 0.9rem;
         }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #3498db, #2980b9);
-            color: white;
-        }
-
-        .btn-success {
-            background: linear-gradient(45deg, #27ae60, #229954);
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            color: white;
-        }
-
-        .admin-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
+        .btn-primary { background: linear-gradient(45deg, #3498db, #2980b9); color: white; }
+        .btn-success { background: linear-gradient(45deg, #27ae60, #229954); color: white; }
+        .btn-danger  { background: linear-gradient(45deg, #e74c3c, #c0392b); color: white; }
+        .admin-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 
         .student-admin-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: white; padding: 15px; border-radius: 10px; margin-bottom: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-
-        .student-admin-info {
-            flex: 1;
-        }
-
-        .student-admin-name {
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-
-        .student-admin-xp {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }
-
-        .student-admin-controls {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .xp-control {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .xp-input {
-            width: 60px;
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            text-align: center;
-        }
+        .student-admin-info { flex: 1; }
+        .student-admin-name { font-weight: bold; color: #2c3e50; margin-bottom: 5px; }
+        .student-admin-xp { color: #7f8c8d; font-size: 0.9rem; }
+        .student-admin-controls { display: flex; gap: 10px; align-items: center; }
+        .xp-control { display: flex; align-items: center; gap: 5px; }
+        .xp-input { width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 5px; text-align: center; }
 
         .missions-section {
             background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: 25px;
-            margin: 30px 0;
+            border-radius: 20px; padding: 25px; margin: 30px 0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-
         .missions-section h3 {
-            color: #2c3e50;
-            text-align: center;
-            font-size: 1.8rem;
-            margin-bottom: 25px;
+            color: #2c3e50; text-align: center; font-size: 1.8rem; margin-bottom: 25px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
-
-        .missions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .mission-category {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 20px;
-            border-left: 5px solid #3498db;
-        }
-
-        .mission-category h4 {
-            color: #2c3e50;
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .mission-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
+        .missions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .mission-category { background: #f8f9fa; border-radius: 15px; padding: 20px; border-left: 5px solid #3498db; }
+        .mission-category h4 { color: #2c3e50; font-size: 1.3rem; margin-bottom: 15px; text-align: center; }
+        .mission-list { display: flex; flex-direction: column; gap: 12px; }
         .mission-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex; justify-content: space-between; align-items: center;
+            background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
         }
-
-        .mission-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .mission-text {
-            flex: 1;
-            color: #2c3e50;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            margin-right: 15px;
-        }
-
+        .mission-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .mission-text { flex: 1; color: #2c3e50; font-size: 0.9rem; line-height: 1.4; margin-right: 15px; }
         .mission-xp {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            min-width: 70px;
-            text-align: center;
+            padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;
+            color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); min-width: 70px; text-align: center;
         }
-
         .xp-10 { background: linear-gradient(45deg, #3498db, #2980b9); }
         .xp-15 { background: linear-gradient(45deg, #e74c3c, #c0392b); }
         .xp-20 { background: linear-gradient(45deg, #2ecc71, #27ae60); }
 
         .students-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px; margin-top: 30px;
         }
 
         .student-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
+            background: white; border-radius: 20px; padding: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease; position: relative; overflow: hidden;
         }
-
         .student-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
             background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
         }
-
-        .student-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-        }
-
-        .student-name {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            text-align: center;
-        }
+        .student-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.25); }
+        .student-name { font-size: 1.8rem; font-weight: bold; color: #2c3e50; margin-bottom: 15px; text-align: center; }
 
         .student-level {
-            text-align: center;
-            font-size: 1rem;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 25px;
-            margin-bottom: 20px;
-            color: white;
+            text-align: center; font-size: 1rem; font-weight: 600;
+            padding: 8px 16px; border-radius: 25px; margin-bottom: 20px; color: white;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
-
         .level-beginner { background: linear-gradient(45deg, #95a5a6, #7f8c8d); }
         .level-adventurer { background: linear-gradient(45deg, #f39c12, #e67e22); }
         .level-hero { background: linear-gradient(45deg, #27ae60, #229954); }
         .level-master { background: linear-gradient(45deg, #9b59b6, #8e44ad); }
 
-        .xp-info {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .xp-current {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .xp-label {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
+        .xp-info { text-align: center; margin-bottom: 20px; }
+        .xp-current { font-size: 2rem; font-weight: bold; color: #2c3e50; }
+        .xp-label { color: #7f8c8d; font-size: 0.9rem; margin-top: 5px; }
 
         .progress-container {
-            margin: 20px 0;
-            background: #ecf0f1;
-            border-radius: 25px;
-            height: 15px;
-            overflow: hidden;
-            position: relative;
+            margin: 20px 0; background: #ecf0f1; border-radius: 25px;
+            height: 15px; overflow: hidden; position: relative;
         }
-
         .progress-bar {
-            height: 100%;
-            border-radius: 25px;
-            transition: all 0.8s ease;
-            position: relative;
+            height: 100%; border-radius: 25px; transition: all 0.8s ease; position: relative;
         }
-
         .progress-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.3) 25%, rgba(255,255,255,0.3) 50%, transparent 50%, transparent 75%, rgba(255,255,255,0.3) 75%);
-            background-size: 20px 20px;
-            animation: progress-stripes 1s linear infinite;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.3) 25%,
+            rgba(255,255,255,0.3) 50%, transparent 50%, transparent 75%, rgba(255,255,255,0.3) 75%);
+            background-size: 20px 20px; animation: progress-stripes 1s linear infinite;
         }
-
-        @keyframes progress-stripes {
-            0% { background-position: 0 0; }
-            100% { background-position: 20px 0; }
-        }
-
+        @keyframes progress-stripes { 0% { background-position: 0 0; } 100% { background-position: 20px 0; } }
         .progress-beginner { background: linear-gradient(45deg, #95a5a6, #7f8c8d); }
         .progress-adventurer { background: linear-gradient(45deg, #f39c12, #e67e22); }
         .progress-hero { background: linear-gradient(45deg, #27ae60, #229954); }
         .progress-master { background: linear-gradient(45deg, #9b59b6, #8e44ad); }
 
         .level-thresholds {
-            background: rgba(255,255,255,0.9);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 30px;
-            text-align: center;
+            background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; margin-top: 30px; text-align: center;
         }
-
-        .level-thresholds h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
+        .level-thresholds h3 { color: #2c3e50; margin-bottom: 15px; font-size: 1.3rem; }
         .threshold-item {
-            display: inline-block;
-            margin: 5px 10px;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            display: inline-block; margin: 5px 10px; padding: 8px 15px; border-radius: 20px;
+            font-size: 0.9rem; font-weight: bold; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: white;
-            font-size: 1.2rem;
-        }
-
-        .loading::after {
-            content: '';
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% { content: '.'; }
-            33% { content: '..'; }
-            66% { content: '...'; }
-            100% { content: '.'; }
-        }
+        .loading { text-align: center; padding: 40px; color: white; font-size: 1.2rem; }
+        .loading::after { content: ''; animation: loading 1.5s infinite; }
+        @keyframes loading { 0% { content: '.'; } 33% { content: '..'; } 66% { content: '...'; } 100% { content: '.'; }
 
         .success-message, .error-message {
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin: 10px 0;
-            font-weight: bold;
-            text-align: center;
+            padding: 10px 15px; border-radius: 8px; margin: 10px 0; font-weight: bold; text-align: center;
         }
-
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
+        .success-message { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error-message   { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
         @media (max-width: 768px) {
-            .students-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .student-card {
-                padding: 20px;
-            }
-            
-            .mission-item {
-                flex-direction: column;
-                text-align: center;
-                gap: 10px;
-            }
-            
-            .mission-text {
-                margin-right: 0;
-            }
-
-            .admin-form {
-                flex-direction: column;
-            }
-
-            .student-admin-item {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-
-            .student-admin-controls {
-                justify-content: center;
-            }
+            .students-grid { grid-template-columns: 1fr; gap: 20px; }
+            .student-card { padding: 20px; }
+            .mission-item { flex-direction: column; text-align: center; gap: 10px; }
+            .mission-text { margin-right: 0; }
+            .admin-form { flex-direction: column; }
+            .student-admin-item { flex-direction: column; gap: 15px; text-align: center; }
+            .student-admin-controls { justify-content: center; }
         }
     </style>
 </head>
@@ -527,9 +227,7 @@
             </div>
         </div>
 
-        <div class="connection-status">
-            ☁️ Online
-        </div>
+        <div class="connection-status">☁️ Online</div>
 
         <!-- Admin Panel -->
         <div id="adminPanel" class="admin-panel">
@@ -564,49 +262,24 @@
 
         <div class="missions-section">
             <h3>🎯 Available Missions</h3>
-            
             <div class="missions-grid">
                 <div class="mission-category">
                     <h4>📚 During the lesson</h4>
                     <div class="mission-list">
-                        <div class="mission-item">
-                            <span class="mission-text">Speak at least 2 full sentences in English</span>
-                            <span class="mission-xp xp-10">+10 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Complete the exercises quickly</span>
-                            <span class="mission-xp xp-15">+15 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Correct one of your sentences with the teacher's help</span>
-                            <span class="mission-xp xp-10">+10 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Take part in a mini roleplay</span>
-                            <span class="mission-xp xp-20">+20 XP</span>
-                        </div>
+                        <div class="mission-item"><span class="mission-text">Speak at least 2 full sentences in English</span><span class="mission-xp xp-10">+10 XP</span></div>
+                        <div class="mission-item"><span class="mission-text">Complete the exercises quickly</span><span class="mission-xp xp-15">+15 XP</span></div>
+                        <div class="mission-item"><span class="mission-text">Correct one of your sentences with the teacher's help</span><span class="mission-xp xp-10">+10 XP</span></div>
+                        <div class="mission-item"><span class="mission-text">Take part in a mini roleplay</span><span class="mission-xp xp-20">+20 XP</span></div>
                     </div>
                 </div>
 
                 <div class="mission-category">
                     <h4>🏠 Outside the lesson</h4>
                     <div class="mission-list">
-                        <div class="mission-item">
-                            <span class="mission-text">Do your weekly homework before the next class</span>
-                            <span class="mission-xp xp-10">+10 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Practice pronunciation with online tools</span>
-                            <span class="mission-xp xp-15">+15 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Watch a 10-minute English video with subtitles</span>
-                            <span class="mission-xp xp-10">+10 XP</span>
-                        </div>
-                        <div class="mission-item">
-                            <span class="mission-text">Write 5 sentences using new vocabulary</span>
-                            <span class="mission-xp xp-20">+20 XP</span>
-                        </div>
+                        <div class="mission-item"><span class="mission-text">Do your weekly homework before the next class</span><span class="mission-xp xp-10">+10 XP</span></div>
+                        <div class="mission-item"><span class="mission-text">Practice pronunciation with online tools</span><span class="mission-xp xp-15">+15 XP</span></div>
+                        <div class="mission-item"><span class="mission-text">Watch a 10-minute English video with subtitles</span><span class="mission-xp xp-10">+10 XP</span></div>
+                        <div class="mission-item"><span class="mission-text">Write 5 sentences using new vocabulary</span><span class="mission-xp xp-20">+20 XP</span></div>
                     </div>
                 </div>
             </div>
@@ -626,10 +299,13 @@
     </div>
 
     <script>
+        // ===== Senha do Admin =====
+        const ADMIN_PASSWORD = "051024";
+
         class EnglishQuestStudent {
             constructor() {
                 this.students = [];
-                this.firebaseUrl = 'https://english-quest1-default-rtdb.firebaseio.com/';
+                this.firebaseUrl = 'https://english-quest1-default-rtdb.firebaseio.com/'; // base do seu DB
                 this.syncInterval = null;
                 this.isAdminMode = false;
                 
@@ -651,18 +327,12 @@
             async loadStudentsFromFirebase() {
                 try {
                     const response = await fetch(`${this.firebaseUrl}/students.json`);
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-
+                    if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                     const data = await response.json();
                     this.students = data ? Object.keys(data).map(key => ({...data[key], id: key})) : [];
                     
                     this.renderStudents();
-                    if (this.isAdminMode) {
-                        this.renderAdminStudents();
-                    }
+                    if (this.isAdminMode) this.renderAdminStudents();
                     return true;
                 } catch (error) {
                     console.error('Firebase load error:', error);
@@ -673,23 +343,19 @@
 
             async saveStudentToFirebase(student) {
                 try {
-                    const url = student.id ? 
-                        `${this.firebaseUrl}/students/${student.id}.json` : 
-                        `${this.firebaseUrl}/students.json`;
-                    
+                    const url = student.id 
+                        ? `${this.firebaseUrl}/students/${student.id}.json`
+                        : `${this.firebaseUrl}/students.json`;
                     const method = student.id ? 'PUT' : 'POST';
                     const dataToSave = { name: student.name, xp: student.xp };
                     
                     const response = await fetch(url, {
-                        method: method,
+                        method,
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(dataToSave)
                     });
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-
+                    if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                     await this.loadStudentsFromFirebase();
                     return true;
                 } catch (error) {
@@ -700,14 +366,8 @@
 
             async deleteStudentFromFirebase(studentId) {
                 try {
-                    const response = await fetch(`${this.firebaseUrl}/students/${studentId}.json`, {
-                        method: 'DELETE'
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-
+                    const response = await fetch(`${this.firebaseUrl}/students/${studentId}.json`, { method: 'DELETE' });
+                    if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                     await this.loadStudentsFromFirebase();
                     return true;
                 } catch (error) {
@@ -730,21 +390,13 @@
             }
 
             getLevelDisplayName(level) {
-                const names = {
-                    beginner: 'Beginner',
-                    adventurer: 'Adventurer',
-                    hero: 'Hero',
-                    master: 'Master'
-                };
+                const names = { beginner: 'Beginner', adventurer: 'Adventurer', hero: 'Hero', master: 'Master' };
                 return names[level];
             }
 
             getProgressToNextLevel(xp) {
                 const level = this.getStudentLevel(xp);
-                
-                if (level === 'master') {
-                    return { percent: 100, current: xp, max: xp };
-                }
+                if (level === 'master') return { percent: 100, current: xp, max: xp };
                 
                 let nextThreshold;
                 if (level === 'beginner') nextThreshold = this.levelThresholds.adventurer.min;
@@ -755,20 +407,17 @@
                 const progress = xp - currentThreshold;
                 const total = nextThreshold - currentThreshold;
                 const percent = (progress / total) * 100;
-                
                 return { percent, current: progress, max: total };
             }
 
             renderStudents() {
                 const container = document.getElementById('studentsContainer');
-                
                 if (this.students.length === 0) {
                     container.innerHTML = `
                         <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #7f8c8d;">
                             <h3>No students found!</h3>
                             <p>The teacher will add students soon.</p>
-                        </div>
-                    `;
+                        </div>`;
                     return;
                 }
 
@@ -777,37 +426,24 @@
                 container.innerHTML = sortedStudents.map((student, index) => {
                     const level = this.getStudentLevel(student.xp);
                     const progress = this.getProgressToNextLevel(student.xp);
-                    
                     return `
                         <div class="student-card">
-                            <div class="student-name">
-                                ${index < 3 ? ['🥇', '🥈', '🥉'][index] : ''} ${student.name}
-                            </div>
-                            <div class="student-level level-${level}">
-                                ${this.getLevelDisplayName(level)}
-                            </div>
-                            
+                            <div class="student-name">${index < 3 ? ['🥇', '🥈', '🥉'][index] : ''} ${student.name}</div>
+                            <div class="student-level level-${level}">${this.getLevelDisplayName(level)}</div>
                             <div class="xp-info">
                                 <div class="xp-current">${student.xp}</div>
                                 <div class="xp-label">Total XP</div>
                             </div>
-                            
                             <div class="progress-container">
-                                <div class="progress-bar progress-${level}" 
-                                     style="width: ${progress.percent}%"></div>
+                                <div class="progress-bar progress-${level}" style="width: ${progress.percent}%"></div>
                             </div>
-                            
-                            <div class="xp-label">
-                                ${level === 'master' ? 'Max Level!' : `${progress.current}/${progress.max} to next level`}
-                            </div>
-                        </div>
-                    `;
+                            <div class="xp-label">${level === 'master' ? 'Max Level!' : `${progress.current}/${progress.max} to next level`}</div>
+                        </div>`;
                 }).join('');
             }
 
             renderAdminStudents() {
                 const container = document.getElementById('adminStudentsList');
-                
                 if (this.students.length === 0) {
                     container.innerHTML = '<div style="text-align: center; color: #7f8c8d; padding: 20px;">No students to manage.</div>';
                     return;
@@ -827,13 +463,12 @@
                                 <div class="xp-control">
                                     <button class="admin-btn btn-success" onclick="englishQuest.adjustXP('${student.id}', 10)">+10</button>
                                     <button class="admin-btn btn-success" onclick="englishQuest.adjustXP('${student.id}', 20)">+20</button>
-                                    <input type="number" class="xp-input" id="xp-${student.id}" placeholder="XP" min="0" max="999">
+                                    <input type="number" class="xp-input" id="xp-${student.id}" placeholder="XP" min="0" max="9999">
                                     <button class="admin-btn btn-primary" onclick="englishQuest.setXP('${student.id}')">Set</button>
                                 </div>
                                 <button class="admin-btn btn-danger" onclick="englishQuest.deleteStudent('${student.id}')">🗑️</button>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 }).join('');
             }
 
@@ -842,17 +477,11 @@
                     this.showMessage('addStudentMessage', 'Please enter a student name.', 'error');
                     return;
                 }
-
                 if (this.students.some(s => s.name.toLowerCase() === name.trim().toLowerCase())) {
                     this.showMessage('addStudentMessage', 'A student with this name already exists.', 'error');
                     return;
                 }
-
-                const student = {
-                    name: name.trim(),
-                    xp: Math.max(0, Math.min(9999, xp))
-                };
-
+                const student = { name: name.trim(), xp: Math.max(0, Math.min(9999, xp)) };
                 const success = await this.saveStudentToFirebase(student);
                 if (success) {
                     this.showMessage('addStudentMessage', `Student "${student.name}" added successfully!`, 'success');
@@ -866,7 +495,6 @@
             async deleteStudent(studentId) {
                 const student = this.students.find(s => s.id === studentId);
                 if (!student) return;
-
                 if (confirm(`Are you sure you want to delete "${student.name}"? This action cannot be undone.`)) {
                     await this.deleteStudentFromFirebase(studentId);
                 }
@@ -875,7 +503,6 @@
             async adjustXP(studentId, amount) {
                 const student = this.students.find(s => s.id === studentId);
                 if (!student) return;
-
                 student.xp = Math.max(0, Math.min(9999, student.xp + amount));
                 await this.saveStudentToFirebase(student);
             }
@@ -883,26 +510,19 @@
             async setXP(studentId) {
                 const student = this.students.find(s => s.id === studentId);
                 if (!student) return;
-
                 const input = document.getElementById(`xp-${studentId}`);
                 const newXP = parseInt(input.value);
-                
                 if (isNaN(newXP) || newXP < 0) {
                     alert('Please enter a valid XP amount (0 or greater).');
                     return;
                 }
-
                 student.xp = Math.min(9999, newXP);
                 await this.saveStudentToFirebase(student);
                 input.value = '';
             }
 
             async awardXPToAll(amount) {
-                if (this.students.length === 0) {
-                    alert('No students to award XP to.');
-                    return;
-                }
-
+                if (this.students.length === 0) { alert('No students to award XP to.'); return; }
                 if (confirm(`Give +${amount} XP to all ${this.students.length} students?`)) {
                     for (const student of this.students) {
                         student.xp = Math.min(9999, student.xp + amount);
@@ -912,11 +532,7 @@
             }
 
             async resetAllXP() {
-                if (this.students.length === 0) {
-                    alert('No students to reset.');
-                    return;
-                }
-
+                if (this.students.length === 0) { alert('No students to reset.'); return; }
                 if (confirm(`Reset ALL students' XP to 0? This action cannot be undone!`)) {
                     for (const student of this.students) {
                         student.xp = 0;
@@ -937,17 +553,21 @@
                     <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #e74c3c;">
                         <h3>Connection Error</h3>
                         <p>Unable to load student data. Please check your connection and try again.</p>
-                    </div>
-                `;
+                    </div>`;
             }
         }
 
-        // Global functions for admin panel
+        // ===== Admin: abre somente com senha 051024 =====
         function toggleAdmin() {
             const panel = document.getElementById('adminPanel');
             const isActive = panel.classList.contains('active');
-            
+
             if (!isActive) {
+                const pwd = prompt('Digite a senha do professor:');
+                if (pwd !== ADMIN_PASSWORD) {
+                    alert('Senha incorreta.');
+                    return;
+                }
                 englishQuest.isAdminMode = true;
                 englishQuest.renderAdminStudents();
                 panel.classList.add('active');
@@ -957,29 +577,27 @@
             }
         }
 
+        // Funções globais chamadas pelos botões do Admin
         function addStudent() {
             const name = document.getElementById('newStudentName').value;
             const xp = parseInt(document.getElementById('newStudentXP').value) || 0;
             englishQuest.addStudent(name, xp);
         }
+        function awardXPToAll(amount) { englishQuest.awardXPToAll(amount); }
+        function resetAllXP() { englishQuest.resetAllXP(); }
 
-        function awardXPToAll(amount) {
-            englishQuest.awardXPToAll(amount);
-        }
-
-        function resetAllXP() {
-            englishQuest.resetAllXP();
-        }
-
-        // Initialize the application
+        // Inicializa app
         const englishQuest = new EnglishQuestStudent();
 
-        // Close modal when clicking outside
-        document.getElementById('passwordModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closePasswordModal();
-            }
-        });
+        // Evita erro se não houver modal de senha no HTML
+        const passwordModalEl = document.getElementById('passwordModal');
+        if (passwordModalEl) {
+            passwordModalEl.addEventListener('click', function(e) {
+                if (e.target === this && typeof closePasswordModal === 'function') {
+                    closePasswordModal();
+                }
+            });
+        }
     </script>
 </body>
 </html>

@@ -973,6 +973,13 @@
 
         // Initialize the application
         const englishQuest = new EnglishQuestStudent();
+
+        // Close modal when clicking outside
+        document.getElementById('passwordModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePasswordModal();
+            }
+        });
     </script>
 </body>
 </html>

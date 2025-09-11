@@ -5,22 +5,832 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>English Quest - Monthly Challenge</title>
     <style>
-        /* (Os estilos permanecem os mesmos) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .title {
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 2.2rem;
+            color: #f8f9fa;
+            opacity: 0.9;
+        }
+
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .status-connected { background: linear-gradient(45deg, #27ae60, #229954); color: white; }
+        .status-connecting { background: linear-gradient(45deg, #f39c12, #e67e22); color: white; }
+        .status-disconnected { background: linear-gradient(45deg, #e74c3c, #c0392b); color: white; }
+
+        .setup-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .setup-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .instruction-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .instruction-box h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .instruction-box ol {
+            padding-left: 20px;
+        }
+
+        .instruction-box li {
+            margin: 5px 0;
+        }
+
+        .setup-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .setup-input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .setup-button {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .setup-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .missions-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .missions-section h3 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .missions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .mission-category {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid #3498db;
+        }
+
+        .mission-category h4 {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .mission-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mission-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mission-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .mission-text {
+            flex: 1;
+            color: #2c3e50;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-right: 15px;
+        }
+
+        .mission-controls { 
+            display: flex; 
+            gap: 10px; 
+            align-items: center; 
+            flex-wrap: wrap;
+        }
+
+        .mission-controls.student-view {
+            justify-content: flex-end;
+        }
+
+        .mission-select {
+            background: #fff; 
+            border: 2px solid #e0e4ef; 
+            color: #2c3e50;
+            padding: 8px 12px; 
+            border-radius: 10px; 
+            min-width: 140px; 
+            outline: none;
+            font-size: 0.85rem;
+        }
+
+        .mission-select:focus { 
+            border-color: #3498db; 
+            box-shadow: 0 0 0 3px rgba(52,152,219,.15); 
+        }
+
+        .admin-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .admin-button {
+            background: linear-gradient(45deg, #34495e, #2c3e50);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .admin-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .admin-button.active {
+            background: linear-gradient(45deg, #27ae60, #229954);
+        }
+
+        .admin-status {
+            margin-top: 10px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .admin-status.active {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .add-student-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .add-student-section.visible {
+            display: block;
+        }
+
+        .add-student-input {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 0 10px;
+            font-size: 1rem;
+            width: 200px;
+        }
+
+        .add-student-input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .add-student-btn {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .student-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .student-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+        }
+
+        .student-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        .student-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .student-level {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 25px;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .level-beginner { background: linear-gradient(45deg, #95a5a6, #7f8c8d); }
+        .level-adventurer { background: linear-gradient(45deg, #f39c12, #e67e22); }
+        .level-hero { background: linear-gradient(45deg, #27ae60, #229954); }
+        .level-master { background: linear-gradient(45deg, #9b59b6, #8e44ad); }
+
+        .xp-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .xp-current {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .xp-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+            background: #ecf0f1;
+            border-radius: 25px;
+            height: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 25px;
+            transition: all 0.8s ease;
+            position: relative;
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.3) 25%, rgba(255,255,255,0.3) 50%, transparent 50%, transparent 75%, rgba(255,255,255,0.3) 75%);
+            background-size: 20px 20px;
+            animation: progress-stripes 1s linear infinite;
+        }
+
+        @keyframes progress-stripes {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 0; }
+        }
+
+        .progress-beginner { background: linear-gradient(45deg, #95a5a6, #7f8c8d); }
+        .progress-adventurer { background: linear-gradient(45deg, #f39c12, #e67e22); }
+        .progress-hero { background: linear-gradient(45deg, #27ae60, #229954); }
+        .progress-master { background: linear-gradient(45deg, #9b59b6, #8e44ad); }
+
+        .buttons-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .buttons-container.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .xp-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .xp-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .xp-button:active {
+            transform: translateY(0);
+        }
+
+        .xp-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .xp-display {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            display: inline-block;
+            margin: 2px;
+        }
+
+        .btn-10, .xp-10 { background: linear-gradient(45deg, #3498db, #2980b9); }
+        .btn-15, .xp-15 { background: linear-gradient(45deg, #e74c3c, #c0392b); }
+        .btn-20, .xp-20 { background: linear-gradient(45deg, #2ecc71, #27ae60); }
+        .btn-edit { 
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            margin-top: 10px;
+            width: 100%;
+        }
+        .btn-delete {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            margin-top: 5px;
+            width: 100%;
+        }
+
+        .level-thresholds {
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .level-thresholds h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .threshold-item {
+            display: inline-block;
+            margin: 5px 10px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .modal-input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            flex: 1;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .modal-btn.confirm {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .modal-btn.cancel {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            z-index: 1000;
+            pointer-events: none;
+            animation: celebrate 1s ease-out;
+        }
+
+        @keyframes celebrate {
+            0% { 
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% { 
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% { 
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .students-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .student-card {
+                padding: 20px;
+            }
+            
+            .buttons-container {
+                gap: 8px;
+            }
+            
+            .xp-button {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            .mission-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .mission-controls.student-view {
+                align-items: center;
+            }
+
+            .mission-select {
+                min-width: auto;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- (O HTML permanece o mesmo) -->
+        <div class="header">
+            <h1 class="title">English Quest</h1>
+            <p class="subtitle">Monthly Challenge</p>
+        </div>
+
+        <div id="connectionStatus" class="connection-status status-connecting">
+            🔄 Starting...
+        </div>
+
+        <!-- Setup Firebase obrigatório -->
+        <div id="setupSection" class="setup-section">
+            <h3>🔧 Firebase Setup Required</h3>
+            <div class="instruction-box">
+                <h4>📋 Quick Setup Instructions:</h4>
+                <ol>
+                    <li>Go to <a href="https://console.firebase.google.com" target="_blank" style="color: #fff;">Firebase Console</a></li>
+                    <li>Create a new project (name it "english-quest")</li>
+                    <li>Go to "Realtime Database" → Create database</li>
+                    <li>Choose "Start in test mode"</li>
+                    <li>Copy your database URL and paste below</li>
+                </ol>
+                <p style="margin-top: 10px; font-size: 0.9rem;"><strong>Note:</strong> This makes the system truly online - all students will see the same data!</p>
+            </div>
+            
+            <div style="margin: 20px 0;">
+                <input type="url" id="firebaseUrl" class="setup-input" placeholder="https://your-project-default-rtdb.firebaseio.com/" 
+                       title="Firebase Realtime Database URL">
+                <input type="password" id="adminPassword" class="setup-input" placeholder="Set Admin Password (min 4 characters)" 
+                       title="Admin password for controlling the system" minlength="4" maxlength="50">
+            </div>
+            
+            <button id="connectFirebase" class="setup-button" style="background: linear-gradient(45deg, #2ecc71, #27ae60);">
+                🚀 Setup Online System
+            </button>
+            
+            <div style="margin-top: 15px; padding: 10px; background: rgba(46, 204, 113, 0.1); border-radius: 8px; font-size: 0.9rem; color: #2c3e50;">
+                <strong>✨ Benefits:</strong> Real-time sync, all devices see same data, automatic backups
+            </div>
+        </div>
+
+        <!-- Conteúdo principal -->
+        <div id="mainContent" style="display: none;">
+            <div class="missions-section">
+                <h3>🎯 Missions</h3>
+                
+                <div class="missions-grid">
+                    <div class="mission-category">
+                        <h4>📚 During the lesson</h4>
+                        <div class="mission-list">
+                            <div class="mission-item">
+                                <span class="mission-text">Speak at least 2 full sentences in English</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="speak"></select>
+                                    <button class="xp-button btn-10" data-xp="10" data-mission="speak">+10 XP</button>
+                                </div>
+                            </div>
+                            <div class="mission-item">
+                                <span class="mission-text">Complete the exercises quickly</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="exercises"></select>
+                                    <button class="xp-button btn-15" data-xp="15" data-mission="exercises">+15 XP</button>
+                                </div>
+                            </div>
+                            <div class="mission-item">
+                                <span class="mission-text">Correct one of your sentences with the teacher's help</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="correct"></select>
+                                    <button class="xp-button btn-10" data-xp="10" data-mission="correct">+10 XP</button>
+                                </div>
+                            </div>
+                            <div class="mission-item">
+                                <span class="mission-text">Take part in a mini roleplay</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="roleplay"></select>
+                                    <button class="xp-button btn-20" data-xp="20" data-mission="roleplay">+20 XP</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mission-category">
+                        <h4>🏠 Outside the lesson</h4>
+                        <div class="mission-list">
+                            <div class="mission-item">
+                                <span class="mission-text">Do your weekly homework before the next class</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="homework"></select>
+                                    <button class="xp-button btn-10" data-xp="10" data-mission="homework">+10 XP</button>
+                                </div>
+                            </div>
+                            <div class="mission-item">
+                                <span class="mission-text">Practice pronunciation with online tools</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="pronunciation"></select>
+                                    <button class="xp-button btn-15" data-xp="15" data-mission="pronunciation">+15 XP</button>
+                                </div>
+                            </div>
+                            <div class="mission-item">
+                                <span class="mission-text">Watch a 10-minute English video with subtitles</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="video"></select>
+                                    <button class="xp-button btn-10" data-xp="10" data-mission="video">+10 XP</button>
+                                </div>
+                            </div>
+                            <div class="mission-item">
+                                <span class="mission-text">Write 5 sentences using new vocabulary</span>
+                                <div class="mission-controls">
+                                    <select class="mission-select" data-mission="writing"></select>
+                                    <button class="xp-button btn-20" data-xp="20" data-mission="writing">+20 XP</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <button id="adminToggle" class="admin-button">🔧 Admin Mode</button>
+                <div id="adminStatus" class="admin-status">Click to enable admin controls</div>
+            </div>
+
+            <div id="addStudentSection" class="add-student-section">
+                <h3>➕ Add New Student</h3>
+                <input type="text" id="newStudentName" class="add-student-input" placeholder="Student Name" maxlength="30">
+                <button id="addStudentBtn" class="add-student-btn">Add Student</button>
+            </div>
+
+            <div id="studentsContainer" class="students-grid">
+                <!-- Students will be dynamically generated here -->
+            </div>
+
+            <div class="level-thresholds">
+                <h3>🏆 Level Thresholds</h3>
+                <span class="threshold-item level-beginner">Beginner: 0-50 XP</span>
+                <span class="threshold-item level-adventurer">Adventurer: 51-150 XP</span>
+                <span class="threshold-item level-hero">Hero: 151-300 XP</span>
+                <span class="threshold-item level-master">Master: 301+ XP</span>
+            </div>
+
+            <!-- Student Link Info -->
+            <div id="studentLinkInfo" class="setup-section" style="display: none;">
+                <h3 style="color: #27ae60;">📱 System Ready! Share with Students</h3>
+                <p style="color: #2c3e50; margin-bottom: 15px;">Send this link to your students:</p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: monospace; word-break: break-all; margin: 10px 0; border: 2px dashed #27ae60;">
+                    <strong id="studentLink"></strong>
+                </div>
+                <p style="color: #7f8c8d; font-size: 0.9rem;">Students will see the same data in real-time - no admin controls for them!</p>
+                <button onclick="navigator.clipboard.writeText(document.getElementById('studentLink').textContent)" class="setup-button" style="background: linear-gradient(45deg, #27ae60, #229954); margin-top: 10px;">
+                    📋 Copy Link
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Modal de senha -->
     <div id="passwordModal" class="modal">
-        <!-- (O HTML permanece o mesmo) -->
+        <div class="modal-content">
+            <h2>🔐 Admin Access</h2>
+            <p style="color: #7f8c8d; margin-bottom: 20px;">Enter admin password</p>
+            <input type="password" id="loginPassword" class="modal-input" placeholder="Enter password" maxlength="50">
+            <div class="modal-buttons">
+                <button id="loginBtn" class="modal-btn confirm">Login</button>
+                <button id="cancelBtn" class="modal-btn cancel">Cancel</button>
+            </div>
+        </div>
     </div>
 
     <!-- Modal de edição -->
     <div id="editModal" class="modal">
-        <!-- (O HTML permanece o mesmo) -->
+        <div class="modal-content">
+            <h2>✏️ Edit Student</h2>
+            <input type="text" id="editStudentName" class="modal-input" placeholder="Student Name" maxlength="30">
+            <input type="number" id="editStudentXp" class="modal-input" placeholder="XP Amount" min="0" max="9999">
+            <div class="modal-buttons">
+                <button id="saveEdit" class="modal-btn confirm">Save</button>
+                <button id="cancelEdit" class="modal-btn cancel">Cancel</button>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button id="addXpModal" class="modal-btn" style="background: #3498db; color: white; flex: 1;">+10 XP</button>
+                <button id="subtractXpModal" class="modal-btn" style="background: #e74c3c; color: white; flex: 1;">-10 XP</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -34,7 +844,7 @@
                 this.currentEditStudent = null;
                 this.syncInterval = null;
                 this.isStudentView = false;
-                this.lastUpdateTime = 0; // Controle de tempo para sincronização
+                this.lastUpdateTime = 0;
                 
                 this.levelThresholds = {
                     beginner: { min: 0, max: 50 },
@@ -68,7 +878,7 @@
                     this.firebaseUrl = decodeURIComponent(firebaseUrl);
                     this.adminPassword = 'student-readonly';
                     await this.loadStudentsFromFirebase();
-                    this.showMainContent(true); // true = student view
+                    this.showMainContent(true);
                     this.startRealtimeSync();
                 } else if (firebaseUrl) {
                     // Admin accessing with Firebase URL in parameters
@@ -82,7 +892,161 @@
                 }
             }
 
-            // ... (outros métodos permanecem iguais até o setupFirebaseSystem)
+            showSetupSection() {
+                this.updateConnectionStatus('disconnected');
+                document.getElementById('setupSection').style.display = 'block';
+                document.getElementById('mainContent').style.display = 'none';
+            }
+
+            async loadStudentsFromFirebase() {
+                try {
+                    this.updateConnectionStatus('connecting');
+                    const response = await fetch(`${this.firebaseUrl}/students.json`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    this.students = data ? Object.keys(data).map(key => ({...data[key], id: key})) : [];
+                    
+                    // Load admin password if it exists
+                    const configResponse = await fetch(`${this.firebaseUrl}/config.json`);
+                    if (configResponse.ok) {
+                        const config = await configResponse.json();
+                        if (config && config.adminPassword) {
+                            this.adminPassword = atob(config.adminPassword);
+                        }
+                    }
+                    
+                    this.updateConnectionStatus('connected');
+                    return true;
+                } catch (error) {
+                    console.error('Firebase load error:', error);
+                    this.updateConnectionStatus('disconnected');
+                    return false;
+                }
+            }
+
+            bindEvents() {
+                // Setup button
+                document.getElementById('connectFirebase').addEventListener('click', () => {
+                    this.setupFirebaseSystem();
+                });
+
+                // Admin controls
+                document.getElementById('adminToggle').addEventListener('click', () => {
+                    if (this.isAdminMode) {
+                        this.isAdminMode = false;
+                        this.updateAdminUI();
+                        this.renderStudents();
+                    } else {
+                        this.requestAdminAccess();
+                    }
+                });
+
+                document.getElementById('loginBtn').addEventListener('click', () => {
+                    this.validatePassword();
+                });
+
+                document.getElementById('cancelBtn').addEventListener('click', () => {
+                    this.closePasswordModal();
+                });
+
+                // Edit modal events
+                document.getElementById('saveEdit').addEventListener('click', () => {
+                    this.saveStudentEdit();
+                });
+
+                document.getElementById('cancelEdit').addEventListener('click', () => {
+                    this.closeEditModal();
+                });
+
+                document.getElementById('addXpModal').addEventListener('click', () => {
+                    this.addXpInModal(10);
+                });
+
+                document.getElementById('subtractXpModal').addEventListener('click', () => {
+                    this.addXpInModal(-10);
+                });
+
+                // Add student
+                document.getElementById('addStudentBtn').addEventListener('click', () => {
+                    this.addStudent();
+                });
+
+                document.getElementById('newStudentName').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.addStudent();
+                    }
+                });
+
+                // Mission XP buttons
+                document.querySelectorAll('.xp-button[data-xp]').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        if (!this.isAdminMode || this.isStudentView) {
+                            alert('Admin mode required to award XP!');
+                            return;
+                        }
+                        
+                        const missionType = e.target.dataset.mission;
+                        const xpAmount = parseInt(e.target.dataset.xp);
+                        const select = document.querySelector(`select[data-mission="${missionType}"]`);
+                        const studentId = select.value;
+                        
+                        if (studentId) {
+                            this.addXpToStudent(studentId, xpAmount);
+                            this.showCelebration();
+                        } else {
+                            alert('Please select a student first!');
+                        }
+                    });
+                });
+
+                // Modal close events
+                document.getElementById('passwordModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'passwordModal') {
+                        this.closePasswordModal();
+                    }
+                });
+
+                document.getElementById('editModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'editModal') {
+                        this.closeEditModal();
+                    }
+                });
+
+                // Enter key support
+                document.getElementById('loginPassword').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.validatePassword();
+                    }
+                });
+
+                document.getElementById('editStudentName').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.saveStudentEdit();
+                    }
+                });
+
+                document.getElementById('editStudentXp').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.saveStudentEdit();
+                    }
+                });
+
+                document.getElementById('firebaseUrl').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.setupFirebaseSystem();
+                    }
+                });
+
+                document.getElementById('adminPassword').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.setupFirebaseSystem();
+                    }
+                });
+            }
 
             async setupFirebaseSystem() {
                 const url = document.getElementById('firebaseUrl').value.trim();
@@ -104,13 +1068,13 @@
                     this.adminPassword = password;
                     
                     // Test connection
-                    const response = await fetch(`${this.firebaseUrl}students.json`);
+                    const response = await fetch(`${this.firebaseUrl}/students.json`);
                     if (!response.ok) {
                         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                     }
 
                     // Save admin config to Firebase
-                    await fetch(`${this.firebaseUrl}config.json`, {
+                    await fetch(`${this.firebaseUrl}/config.json`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -180,7 +1144,117 @@
                 this.updateSelects();
             }
 
-            // ... (outros métodos permanecem iguais até addXpToStudent)
+            showStudentLinkInfo() {
+                const studentLink = `${window.location.href.split('?')[0]}?firebase=${encodeURIComponent(this.firebaseUrl)}&view=student`;
+                document.getElementById('studentLink').textContent = studentLink;
+                document.getElementById('studentLinkInfo').style.display = 'block';
+                
+                // Auto-hide after 30 seconds
+                setTimeout(() => {
+                    document.getElementById('studentLinkInfo').style.display = 'none';
+                }, 30000);
+            }
+
+            startRealtimeSync() {
+                // Sync every 3 seconds
+                this.syncInterval = setInterval(async () => {
+                    await this.loadStudentsFromFirebase();
+                    this.renderStudents();
+                    this.updateSelects();
+                }, 3000);
+            }
+
+            updateConnectionStatus(status) {
+                const statusEl = document.getElementById('connectionStatus');
+                statusEl.className = `connection-status status-${status}`;
+                
+                const statusTexts = {
+                    connecting: '🔄 Connecting...',
+                    connected: '☁️ Online',
+                    disconnected: '❌ Offline'
+                };
+                
+                statusEl.textContent = statusTexts[status] || status;
+            }
+
+            requestAdminAccess() {
+                document.getElementById('loginPassword').value = '';
+                document.getElementById('passwordModal').style.display = 'flex';
+                setTimeout(() => {
+                    document.getElementById('loginPassword').focus();
+                }, 100);
+            }
+
+            validatePassword() {
+                const enteredPassword = document.getElementById('loginPassword').value;
+                
+                if (enteredPassword === this.adminPassword) {
+                    this.isAuthenticated = true;
+                    this.isAdminMode = true;
+                    this.closePasswordModal();
+                    this.updateAdminUI();
+                    this.renderStudents();
+                } else {
+                    alert('Incorrect password!');
+                    document.getElementById('loginPassword').value = '';
+                }
+            }
+
+            closePasswordModal() {
+                document.getElementById('passwordModal').style.display = 'none';
+            }
+
+            updateAdminUI() {
+                const adminButton = document.getElementById('adminToggle');
+                const adminStatus = document.getElementById('adminStatus');
+                const addStudentSection = document.getElementById('addStudentSection');
+
+                if (this.isAdminMode) {
+                    adminButton.classList.add('active');
+                    adminButton.textContent = '🔓 Admin Mode ON';
+                    adminStatus.textContent = 'Admin controls enabled';
+                    adminStatus.classList.add('active');
+                    addStudentSection.classList.add('visible');
+                } else {
+                    adminButton.classList.remove('active');
+                    adminButton.textContent = '🔧 Admin Mode';
+                    adminStatus.textContent = 'Click to enable admin controls';
+                    adminStatus.classList.remove('active');
+                    addStudentSection.classList.remove('visible');
+                }
+            }
+
+            async addStudent() {
+                if (!this.isAdminMode) {
+                    alert('Admin mode required to add students!');
+                    return;
+                }
+
+                const nameInput = document.getElementById('newStudentName');
+                const name = nameInput.value.trim();
+
+                if (!name) {
+                    alert('Please enter a student name!');
+                    return;
+                }
+
+                if (this.students.find(s => s.name.toLowerCase() === name.toLowerCase())) {
+                    alert('A student with this name already exists!');
+                    return;
+                }
+
+                const newStudent = {
+                    id: Date.now().toString(),
+                    name: name,
+                    xp: 0
+                };
+
+                this.students.push(newStudent);
+                await this.saveStudentsToFirebase();
+                this.renderStudents();
+                this.updateSelects();
+                nameInput.value = '';
+            }
 
             async addXpToStudent(studentId, xpAmount) {
                 // Verificar se é admin antes de permitir alterações
@@ -215,23 +1289,18 @@
                 }
             }
 
-            // ... (outros métodos permanecem iguais até saveStudentsToFirebase)
-
             async saveStudentsToFirebase() {
                 try {
-                    // Atualizar o timestamp para controle de sincronização
-                    this.lastUpdateTime = Date.now();
-                    
                     const studentsData = {};
                     this.students.forEach(student => {
                         studentsData[student.id] = {
                             name: student.name,
                             xp: student.xp,
-                            lastUpdated: this.lastUpdateTime
+                            lastUpdated: new Date().toISOString()
                         };
                     });
 
-                    const response = await fetch(`${this.firebaseUrl}students.json`, {
+                    const response = await fetch(`${this.firebaseUrl}/students.json`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(studentsData)
@@ -246,50 +1315,118 @@
                 }
             }
 
-            // ... (outros métodos permanecem iguais até startRealtimeSync)
+            editStudent(studentId) {
+                if (!this.isAdminMode) {
+                    alert('Admin mode required!');
+                    return;
+                }
 
-            startRealtimeSync() {
-                // Sincronização em tempo real - verificar a cada 2 segundos
-                this.syncInterval = setInterval(async () => {
-                    try {
-                        // Verificar se há atualizações no servidor
-                        const response = await fetch(`${this.firebaseUrl}students.json?time=${Date.now()}`);
-                        
-                        if (response.ok) {
-                            const data = await response.json();
-                            
-                            if (data) {
-                                // Verificar se há dados mais recentes no servidor
-                                let needsUpdate = false;
-                                const serverStudents = Object.keys(data).map(key => ({...data[key], id: key}));
-                                
-                                for (const serverStudent of serverStudents) {
-                                    const localStudent = this.students.find(s => s.id === serverStudent.id);
-                                    
-                                    if (!localStudent || 
-                                        (serverStudent.lastUpdated && 
-                                         serverStudent.lastUpdated > (localStudent.lastUpdated || 0))) {
-                                        // Dados do servidor são mais recentes
-                                        needsUpdate = true;
-                                        break;
-                                    }
-                                }
-                                
-                                if (needsUpdate) {
-                                    await this.loadStudentsFromFirebase();
-                                    this.renderStudents();
-                                    this.updateSelects();
-                                }
-                            }
-                        }
-                    } catch (error) {
-                        console.error('Sync error:', error);
-                        this.updateConnectionStatus('disconnected');
-                    }
-                }, 2000);
+                const student = this.students.find(s => s.id === studentId);
+                if (student) {
+                    this.currentEditStudent = studentId;
+                    document.getElementById('editStudentName').value = student.name;
+                    document.getElementById('editStudentXp').value = student.xp;
+                    document.getElementById('editModal').style.display = 'flex';
+                }
             }
 
-            // ... (outros métodos permanecem iguais até renderStudents)
+            async saveStudentEdit() {
+                const name = document.getElementById('editStudentName').value.trim();
+                const xp = parseInt(document.getElementById('editStudentXp').value) || 0;
+
+                if (!name) {
+                    alert('Please enter a student name!');
+                    return;
+                }
+
+                if (xp < 0 || xp > 9999) {
+                    alert('XP must be between 0 and 9999!');
+                    return;
+                }
+
+                const student = this.students.find(s => s.id === this.currentEditStudent);
+                if (student) {
+                    const existingStudent = this.students.find(s => 
+                        s.name.toLowerCase() === name.toLowerCase() && s.id !== this.currentEditStudent
+                    );
+                    
+                    if (existingStudent) {
+                        alert('A student with this name already exists!');
+                        return;
+                    }
+
+                    student.name = name;
+                    student.xp = xp;
+                    
+                    await this.saveStudentsToFirebase();
+                    this.renderStudents();
+                    this.updateSelects();
+                    this.closeEditModal();
+                }
+            }
+
+            addXpInModal(amount) {
+                const xpInput = document.getElementById('editStudentXp');
+                const currentXp = parseInt(xpInput.value) || 0;
+                const newXp = Math.max(0, Math.min(9999, currentXp + amount));
+                xpInput.value = newXp;
+            }
+
+            closeEditModal() {
+                document.getElementById('editModal').style.display = 'none';
+                this.currentEditStudent = null;
+            }
+
+            async deleteStudent(studentId) {
+                if (!this.isAdminMode) {
+                    alert('Admin mode required!');
+                    return;
+                }
+
+                if (confirm('Remove this student?')) {
+                    this.students = this.students.filter(s => s.id !== studentId);
+                    await this.saveStudentsToFirebase();
+                    this.renderStudents();
+                    this.updateSelects();
+                }
+            }
+
+            getStudentLevel(xp) {
+                if (xp >= this.levelThresholds.master.min) return 'master';
+                if (xp >= this.levelThresholds.hero.min) return 'hero';
+                if (xp >= this.levelThresholds.adventurer.min) return 'adventurer';
+                return 'beginner';
+            }
+
+            getLevelDisplayName(level) {
+                const names = {
+                    beginner: 'Beginner',
+                    adventurer: 'Adventurer',
+                    hero: 'Hero',
+                    master: 'Master'
+                };
+                return names[level];
+            }
+
+            getProgressToNextLevel(xp) {
+                const level = this.getStudentLevel(xp);
+                
+                if (level === 'master') {
+                    return { percent: 100, current: xp, max: xp };
+                }
+                
+                let nextThreshold;
+                if (level === 'beginner') nextThreshold = this.levelThresholds.adventurer.min;
+                else if (level === 'adventurer') nextThreshold = this.levelThresholds.hero.min;
+                else if (level === 'hero') nextThreshold = this.levelThresholds.master.min;
+                
+                const currentThreshold = this.levelThresholds[level].min;
+                const progress = xp - currentThreshold;
+                const total = nextThreshold - currentThreshold;
+                const percent = (progress / total) * 100;
+                
+                return { percent, current: progress, max: total };
+            }
 
             renderStudents() {
                 const container = document.getElementById('studentsContainer');
@@ -359,7 +1496,45 @@
                 }).join('');
             }
 
-            // ... (outros métodos permanecem iguais)
+            updateSelects() {
+                // Only update selects for admin view
+                if (this.isStudentView) return;
+                
+                const selects = document.querySelectorAll('.mission-select');
+                
+                selects.forEach(select => {
+                    const currentValue = select.value;
+                    const sortedStudents = [...this.students].sort((a, b) => a.name.localeCompare(b.name));
+                    
+                    select.innerHTML = '<option value="">Select student...</option>' +
+                        sortedStudents.map(student => 
+                            `<option value="${student.id}" ${currentValue === student.id ? 'selected' : ''}>${student.name}</option>`
+                        ).join('');
+                });
+            }
+
+            showCelebration() {
+                const celebration = document.createElement('div');
+                celebration.className = 'celebration';
+                celebration.textContent = '🎉';
+                document.body.appendChild(celebration);
+                
+                setTimeout(() => {
+                    document.body.removeChild(celebration);
+                }, 1000);
+            }
+
+            showLevelUpCelebration(studentName, newLevel) {
+                const celebration = document.createElement('div');
+                celebration.className = 'celebration';
+                celebration.innerHTML = `🏆<br><span style="font-size: 1rem;">${studentName}<br>Level Up!<br>${this.getLevelDisplayName(newLevel)}</span>`;
+                celebration.style.fontSize = '3rem';
+                document.body.appendChild(celebration);
+                
+                setTimeout(() => {
+                    document.body.removeChild(celebration);
+                }, 2000);
+            }
         }
 
         // Initialize the application
